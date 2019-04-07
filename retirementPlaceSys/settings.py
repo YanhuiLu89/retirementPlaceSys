@@ -55,7 +55,7 @@ ROOT_URLCONF = 'retirementPlaceSys.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates').replace('\\', '/'),],#配置模板的位置
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

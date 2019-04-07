@@ -47,7 +47,7 @@
         </div>
         <div id="content_menu">
             <p>
-                <form action="{% url 'pages:index' %}" method="post" />{% csrf_token %}
+                <form action="{% url 'pages:index' %}" method="post" name='index'>{% csrf_token %}
                     <button type="submit" class="btn btn-info" name="regist">注册</button>
                     <button type="submit" class="btn btn-info" name="login">登陆</button>
                 </form>

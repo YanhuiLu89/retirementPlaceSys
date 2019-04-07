@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>主页</title>
+    <title>登陆</title>
      <!-- 使用CSS样式来控制div布局 -->
      <style type="text/css">
         /*定义全局的div布局*/
@@ -40,19 +40,31 @@
 <style>       html,body{text-align:center;margin:0px auto;}
 </style>
 <body>
-    <!-- 在这里控制全局的页面，定义div的id是"global" -->
     <div id="global">
         <div id="heading"
-            <h1>欢迎进入海南省候鸟式养老系统！</h1>
+            <h1>欢迎登录海南省候鸟式养老系统！</h1>
         </div>
-        <div id="content_menu">
-            <p>
-                <form action="{% url 'pages:index' %}" method="post" />{% csrf_token %}
-                    <button type="submit" class="btn btn-info" name="regist">注册</button>
-                    <button type="submit" class="btn btn-info" name="login">登陆</button>
+        <div id="content">
+            <div style="margin: 15% 40%;" class="divcss5-left">
+                    <form action="{% url 'pages:login' %}" method="post" name='login'>{% csrf_token %}
+                    <p>
+                        <label for="id_username">用户名：</label>
+                        <input type="text" id="id_username" name="username" placeholder="用户名" autofocus required />
+                    </p>         
+                    <p>
+                        <label for="id_password">密码：</label>
+                        <input type="password" id="id_password" placeholder="密码" name="password" required >
+                    </p>
+                    <p>
+                        <label for="id_usertype" >用户类型：</label>
+                        <select id="usertype"  name="usertype" panelHeight="auto" panelWidth="autofocus">
+                                <option value=0>顾客</option>
+                                <option value=1>管理员</option>
+                        </select>
+                    </p>
+                    <input type="submit" value="登录">
                 </form>
-            </p>
+            </div>
         </div>
-    </div>
 </body>
 </html>
