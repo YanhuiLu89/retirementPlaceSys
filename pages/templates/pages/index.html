@@ -47,11 +47,9 @@
         </div>
         <div id="content_menu">
             <p>
-                <form action="/toregist/" method="post">
-                    <input type="submit" value="注册">
-                </form>
-                <form action="/tologin/" method="post">
-                <input type="submit" value="登陆">
+                <form action="{% url 'pages:index' %}" method="post" name='index'>{% csrf_token %}
+                    <button type="submit" class="btn btn-info" name="regist">注册</button>
+                    <button type="submit" class="btn btn-info" name="login">登陆</button>
                 </form>
             </p>
         </div>
