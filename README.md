@@ -1,0 +1,2 @@
+# retirementPlaceSys
+基于django的海南省候鸟式养老系统
