@@ -56,4 +56,4 @@ def login(request):#登陆
 def placelist(request):#地址列表
     place_list = Places.objects.all()
     context = {'place_list': place_list}
-    return render(request, 'lib/detail.html', context)
+    return render(request, 'lib/placelist.html', context)
