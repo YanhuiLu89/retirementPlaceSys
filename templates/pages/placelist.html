@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
 
-{% block head %}
-    <h1>您可以选择以下地址！</h1>
-{% endblock %}
-
-{% block contentmenu %}
-    <p>
-        <form action="{% url 'pages:placelist' %}" method="post" name='placelist'>{% csrf_token %}
-            <p>
-                <button type="submit" class="btn btn-logout" name="logout">退出</button>
-            </p>   
-            <p>
-                <input type="text" id="search" name="search_content" placeholder="请输入您要搜索的内容" autofocus required />
-                <button type="submit" class="btn btn-info" name="search">搜索</button>
-            </p>
-        </form>
-    </p>
+{% block head %}  
+    <form action="{% url 'pages:placelist' %}" method="post" name='placelist' style="float:middle">{% csrf_token %}
+        <tr>
+            <td><h2>您可以选择以下地址！</h2></td>
+            <td>
+                <input type="submit" name='logout' value="退出" style="width:80px; height:30px;float:right">
+            </td>
+        </tr> 
+    </form>
 {% endblock %}
 
 {% block contentbody %}
     <div style="margin: 10% 20%;">
+        <p>
+            <table>
+                <tr>
+                    <td><input type="text" id="search" name="search_content" placeholder="请输入您要搜索的内容" style="width:600px; height:30px" autofocus required /></td>
+                    <td><input type="submit" name='search' value="搜索" style="width:80px; height:30px"></td>
+                </tr>
+            </table>
+        </p>
         <table>
             <tr>
                 <td>名称</td>
