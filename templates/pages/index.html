@@ -4,11 +4,17 @@
     <h1>欢迎进入海南省候鸟式养老系统！</h1>
 {% endblock %}
 
+{% block style %}
+    <style>
+        input,select{height:30px; width:120px; vertical-align:left;}
+    </style>
+{% endblock %}
+
 {% block contentmenu %}
-    <p>
-        <form action="{% url 'pages:index' %}" method="post" name='index'>{% csrf_token %}
-            <button type="submit" class="btn btn-info" name="regist">注册</button>
-            <button type="submit" class="btn btn-info" name="login">登陆</button>
-        </form>
-    </p>
+    <form action="{% url 'pages:index' %}" method="post" name='index'>{% csrf_token %}
+        <table align="center">
+            <tr><td><input  type="submit" value="注册" name="regist"></td></tr>
+            <tr><td><input  type="submit" value="登录" name="login"></td></tr>           
+        </table> 
+    </form>
 {% endblock %}
