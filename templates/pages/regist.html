@@ -1,67 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>注册</title>
-        <!-- 使用CSS样式来控制div布局 -->
-        <style type="text/css">
-        /*定义全局的div布局*/
-        div#global{
-            /*设置宽度，设置百分比可以根据浏览器自适应宽度*/
-            width: 100%;
-            /*设置高度，950px是设置是实体高度，不能自适应的*/
-            height: 800px;
-            /*设置背景颜色*/
-            background-color: silver; 
-            background:url("/static/images/welcome.png");
-            background-size: 100%,100%;
-        }
-        /*定义头部布局，前面的div可以不用写，#号前面默认有个id，凡事定义了id的标签，都可以用#号来表示*/
-        #heading{
-            width: 100%;
-            height: 100px;
-            font-size:32px;
-        }
-        #content_menu{
-            width: 20%;
-            height: 700px;
-            font-size:28px;
-            /*定义浮动，不定义的话，界面会乱*/
-            float: right;
-        }
-        #content_body{
-            width: 80%;
-            height: 700px;
-            float: middle;
-            font-size:28px;            
-        }
+{% extends 'base.html' %}
+
+{% block style %}
+    <style>
+        input,select{height:30px; width:120px; vertical-align:left;}
     </style>
-</head>
-<style>       html,body{text-align:center;margin:0px auto;}
-</style>
-<body>
-    <div id="global">
-        <div id="heading"
-            <h1>感谢注册海南省候鸟式养老系统！</h1>
-        </div>
-    <div id="content">
-        <div style="margin: 15% 40%;" class="divcss5-left">
-                <form action="{% url 'pages:regist' %}" method="post" name='regist'>{% csrf_token %}
-                <p>
-                    <label for="id_username">用户名：</label>
-                    <input type="text" id="id_username" name="username" placeholder="用户名" autofocus required />
-                </p>         
-                <p>
-                    <label for="id_password">密码：</label>
-                    <input type="password" id="id_password" placeholder="密码" name="password" required >
-                </p>
-                <p>
-                    <label for="id_password">邮箱：</label>
-                    <input type="text" id="id_mail" placeholder="邮箱" name="mail" required >
-                </p>
-                <input type="submit" value="注册">
-            </form>
-            </div>
+{% endblock %}
+
+{% block head %}
+    <h1>感谢注册海南省候鸟式养老系统！</h1>
+{% endblock %}
+
+{% block contentbody %}
+    <div style="margin: 15% 40%;">
+            <form action="{% url 'pages:regist' %}" method="post" name='regist'>{% csrf_token %}
+                <table align="center">
+                    <tr>
+                        <td>名称：</td>
+                        <td><input type="text" id="id_username" name="username" placeholder="用户名" autofocus required  /></td>
+                    </tr>
+                    <tr>
+                        <td>密码：</td>
+                        <td><input type="password" id="id_password" placeholder="密码" name="password" required  /></td>
+                    </tr>
+                    <tr>
+                        <td>邮箱：</td>
+                        <td><input type="text" id="id_mail" placeholder="邮箱" name="mail" required /></td>
+                    </tr>
+                    <tr>
+                        <td>身份：</td>
+                        <td>
+                            <select id="usertype"  name="usertype" panelHeight="auto" >
+                                <option value=0>顾客</option>
+                                <option value=1>管理员</option>
+                            </select> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" value="注册">
+                        </td>
+                    </tr>
+                </table>     
+        </form>
     </div>
-</body>
-</html>
+{% endblock %}
