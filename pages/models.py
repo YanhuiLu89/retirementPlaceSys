@@ -8,8 +8,8 @@ class Users(models.Model):
     email = models.EmailField()
 
 class Places(models.Model):
-    name = models.CharField(max_length=50)
-    introduce = models.CharField(max_length=300)
-    address = models.CharField(max_length=50)
-    time = models.DateTimeField(max_length=50)
-    image=models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
+    introduce = models.TextField(max_length=2000)
+    address = models.CharField(max_length=300)
+    time = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images')

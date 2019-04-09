@@ -128,3 +128,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static').replace('\\', '/'),
                    )#定义，我们用到的一些静态资源从这里找
+
+#配置多媒体路径存放图片
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/pages/files/'
