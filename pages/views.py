@@ -4,32 +4,34 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.core.files.base import ContentFile
+from django.utils import timezone
 
 from .models import Users,Places
 import time
 
-# Create your views here.
-def index(request):#index,首页
-    if request.method == 'POST':     
-        if 'regist' in request.POST:
-            return render(request, 'pages/regist.html')#跳转到注册页面    
-        elif  'login' in request.POST: 
-            return render(request, 'pages/login.html')#跳转到登陆页面        
-    return render(request, 'pages/index.html')
+from django.contrib import messages
 
-def regist(request):#注册
+# Create your views here.
+def index(request):#入口页
     if request.method == 'POST':  
         temp_name = request.POST['username']
         temp_psw = request.POST['password']
         temp_mail = request.POST['mail']
         print( temp_name+","+temp_psw+","+temp_mail)
         if Users.objects.filter(name=temp_name).exists():
-            return HttpResponse("该用户名已经存在！！！")
+            messages.add_message(request,messages.ERROR,'该用户名已经存在')
+            return render(request,'pages/index.html')
         if Users.objects.filter(email=temp_mail).exists():
-            return HttpResponse("该邮箱已经注册过！！！")
+            messages.add_message(request,messages.ERROR,'该邮箱已经注册过')
+            return render(request,'pages/index.html')
         user = Users(usertype=0,name=temp_name, password=temp_psw, email=temp_mail)
         user.save()
-        return HttpResponse("注册成功")
+        messages.add_message(request,messages.INFO,'注册成功')
+        return render(request,'pages/index.html')
+    return render(request,'pages/index.html')
+
+def logout(request):#退出
+    return render(request,'pages/index.html')
 
 def login(request):#登陆
     if request.method == 'POST':
@@ -46,44 +48,45 @@ def login(request):#登陆
             if user.password==password and user.usertype==usertype:
                 print("2222222222222222222")
                 if user.usertype==1:
-                    return render(request, 'pages/placelist_add.html')
+                    return render(request, 'pages/homepage_a.html',placelist())#跳到管理员首页界面
                 else:
-                    return render(request, 'pages/placelist.html')
+                    return render(request, 'pages/homepage.html',placelist())#跳到会员首页界面
             else:
-                # return HttpResponse('用户密码错误')
-                return render(request, 'pages/login.html', {'password': '用户密码或身份类型错误错误'})
+                messages.add_message(request,messages.ERROR,'用户密码或身份类型错误错误')
+                return render(request, 'pages/login.html')
         else:
-            # return HttpResponse('用户不存在')
-            return render(request, 'pages/login.html', {'name': '用户不存在'})
+            print("333333333333333333333")
+            messages.add_message(request,messages.ERROR,'用户不存在')
+            return render(request, 'pages/login.html')
+    return render(request, 'pages/login.html')
 
-def placelist(request):#地址列表
+def placelist():#地址列表
     place_list = Places.objects.all()
     context = {'place_list': place_list}
-    return render(request, 'lib/placelist.html', context)
+    return context
 
-def toadd(request):#添加
-    return render(request, 'lib/placelist_add.html')
+def addspot(request):#添加景点界面
+    return render(request, 'pages/admin_addplace.html')
 
-def toview(request):#添加
-    return render(request, 'lib/placelist_admin.html')
+def home(request):#去首页
+    return render(request, 'pages/homepage.html')
 
-def add(request):#添加
+def myinfo(request):#我的界面
+    return render(request, 'pages/homepage.html')
+
+def addplace(request):#添加地点页面
     if request.method == 'POST':
         name = request.POST['name']
-        address =  request.POST['address']
-        time = request.POST['time']
         introduce = request.POST['introduce']
-        image= request.FILES['image']
-        print( request.FILES);
-        # 查询用户是否在数据库中
-        print("%s,%s,%s,%s,%s"%(name, introduce,address,time,image))
+        price= int(request.POST['price'])
+
         if name!="":
-            print("3333333333333333333333")
-            place=Places(name=name.encode('utf-8'),introduce=introduce.encode('utf-8'),address=address.encode('utf-8'),\
-                time=time.encode('utf-8'),image=image)
+            place=Places(name=name,introduce=introduce,price=price,publishtime=timezone.now())
             place.save()
-            print("444444444444444444444444444444" )
-            return render(request, 'pages/placelist_add.html',  {'add': '添加成功'})
+            messages.add_message(request,messages.INFO,'添加成功')
+            return render(request, 'pages/admin_addplace.html')
         else:
-            # return HttpResponse('用户不存在')
-            return render(request, 'pages/placelist_add.html', {'name': '名称不能为空'})
+            messages.add_message(request,messages.INFO,'名称不能为空')
+            return render(request, 'pages/admin_addplace.html')
+        return render(request, 'pages/admin_addplace.html')
+    return render(request,'pages/admin_addplace.html')

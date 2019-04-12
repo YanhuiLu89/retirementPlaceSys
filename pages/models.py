@@ -10,7 +10,13 @@ class Users(models.Model):
 class Places(models.Model):
     name = models.CharField(max_length=100)
     introduce = models.TextField(max_length=2000)
-    address = models.CharField(max_length=300)
-    time = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='images')
+    price = models.IntegerField(default=3000)
     publishtime = models.DateTimeField('date published')
+
+class Scenicspot(models.Model):
+    place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 是外键标志景点在哪个城市
+    name = models.CharField(max_length=100)
+    introduce = models.TextField(max_length=2000)
+    address = models.CharField(max_length=300)
+    image = models.ImageField(upload_to='images')
+    opentime = models.CharField(max_length=100)

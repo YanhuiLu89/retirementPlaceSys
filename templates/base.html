@@ -65,14 +65,12 @@
     <div id="global">
         <div id="topmenuright" >
             {% block topmenuright %}
-               <a id =link  href="{% url 'pages:login' %}">我的</a> 
-                <a id =link href="{% url 'pages:login' %}">退出</a> 
+               <a id =link  href="{% url 'pages:myinfo' %}">我的</a> 
+                <a id =link href="{% url 'pages:logout' %}">退出</a> 
             {% endblock %}
         </div>
         <div id="topmenucenter">
             {% block topmenucenter %}
-                <form action="{% url 'pages:ontopmenu_center' %}" method="post" name='ontopmenu_center'>{% csrf_token %}
-                </form>
             {% endblock %}
         </div>
         <div id="heading">
@@ -80,8 +78,13 @@
             {% endblock %}
         </div>
         <div id="content_body">
-            {% block contentbody %}
-            {% endblock %}
+            <div>
+                {% for message in messages %}
+                    <div class='alert alert-{{message.tags}}' style="color:coral">{{ message }}</div>
+                {% endfor %}
+            </div>
+                {% block contentbody %}
+                {% endblock %}
         </div>
     </div>
 </body>

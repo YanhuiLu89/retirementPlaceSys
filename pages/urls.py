@@ -5,10 +5,10 @@ app_name='[pages]'
 
 urlpatterns = [
     path('index/', views.index, name='index'),
-    path('regist/', views.regist, name='regist'),
     path('login/', views.login, name='login'),
-    path('homepage/', views.placelist, name='placelist'),
-    path('admin_addplace/', views.add, name='add'),
-    path('placelist_add/', views.toadd, name='toadd'),
-    path('placelist_add/', views.toview, name='toview'),
+    path('logout/', views.logout, name='logout'),
+    path('addplace/', views.addplace, name='addplace'),
+    path('myinfo/', views.myinfo, name='myinfo'),
+    path('home/', views.home, name='home'),
+    path('addspot/', views.addspot, name='addspot'),
 ]

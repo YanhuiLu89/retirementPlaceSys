@@ -2,16 +2,25 @@
 
 {% block style %}
     <style>
-        input,select{height:30px; width:120px; vertical-align:left;}
+        input,select{height:30px; width:200px; vertical-align:left;}
     </style>
 {% endblock %}
 
+{% block topmenucenter %}
+<br/>
+{% endblock %}
+
+{% block topmenuright %}
+<br/>
+{% endblock %}
+
 {% block head %}
-    <h1>欢迎登录海南省候鸟式养老系统！</h1>
+<br/>
 {% endblock %}
 
 {% block contentbody %}
-    <div style="margin: 15% 40%;">
+    <div style="width:100%;margin:5% 5% 5% 5%">
+            <h2>海南省候鸟式养老信息系统</h2>
             <form action="{% url 'pages:login' %}" method="post" name='login'>{% csrf_token %}
                <table align="center">
                     <tr>
@@ -26,7 +35,7 @@
                         <td>身份：</td>
                         <td>
                             <select id="usertype"  name="usertype" panelHeight="auto" >
-                                <option value=0>顾客</option>
+                                <option value=0>会员</option>
                                 <option value=1>管理员</option>
                             </select> 
                         </td>
