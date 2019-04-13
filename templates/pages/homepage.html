@@ -18,6 +18,14 @@
         text-decoration:none;
         color:black;         
     }
+    #textcontent {
+        width: 80%;
+        height: auto;
+        word-wrap:break-word;
+        word-break:break-all;
+        overflow: hidden;
+        margin:5% auto
+    }
 </style>
 {% endblock %}
 {% block topmenucenter %}
@@ -39,23 +47,13 @@
 				<td><input type="submit" name='search' value="搜索" style="width:80px; height:30px"></td>
 			</tr>
 		</table>
-        <table>
-            <tr>
-                <td>名称</td>
-                <td>简介</td>
-                <td>地址</td>
-                <td>开放时间</td>
-                <td>图片</td>
-            </tr>
+        <div id=textcontent>
             {% for place in place_list.all %}
-                <tr>
-                    <td>{{ place.name }}</td>
-                    <td>{{ place.introduce }}</td>
-                    <td>{{ book.address }}</td>
-                    <td>{{ book.time }}</td>
-                    <td>{{ book.image }}</td>
-                </tr>
+                <h4>{{ place.name }}</h4>
+                <p><lable id='简介:'></label> {{ place.introduce}}</p>
+                <p><lable id='价格:'></label>{{place.price}}</p>
+                <p><lable id='发布时间:'></lable> {{place.publishtime}}</p>
             {% endfor %}
-        </table>
+        </div>
     </div>
 {% endblock %}

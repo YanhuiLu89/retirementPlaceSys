@@ -9,8 +9,6 @@ from django.utils import timezone
 from .models import Users,Places
 import time
 
-from django.contrib import messages
-
 # Create your views here.
 def index(request):#入口页
     if request.method == 'POST':  
