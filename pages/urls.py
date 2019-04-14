@@ -15,4 +15,8 @@ urlpatterns = [
     path('myinfo/', views.myinfo, name='myinfo'),
     path('home/', views.home, name='home'),
     path('addspot/', views.addspot, name='addspot'),
+    path('searchplace/', views.searchplace, name='searchplace'),
+    path('highsearch/', views.highsearch, name='highsearch'),
+    path('retiregroup/', views.retiregroup, name='retiregroup'),
+    path('shareplace/<place_name>', views.shareplace, name='shareplace'),
 ]

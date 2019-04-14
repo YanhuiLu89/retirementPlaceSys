@@ -26,10 +26,6 @@
         overflow: hidden;
         margin:5% auto
     }
-    #pcontent{
-        font-size:28px;
-        color:darkslategrey
-    }
 </style>
 {% endblock %}
 {% block topmenucenter %}
@@ -74,8 +70,10 @@
                         <td>{{place.hashospital}}</td>
                     </tr>
                 </p>
+                <p align="center">
+                    <a href="{% url 'pages:shareplace' place.name %}">分享</a></td>  
+                </p>
                 <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
-                <p align="center"><a href="{% url 'pages:shareplace' place.name %}">分享</a></p>
             {% endfor %}
         </div>
     </div>

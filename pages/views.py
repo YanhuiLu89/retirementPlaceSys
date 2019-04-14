@@ -5,12 +5,14 @@ from django.urls import reverse
 from django.contrib import messages
 from django.core.files.base import ContentFile
 from django.utils import timezone
+from django.db.models import Q 
 
 from .models import Users,Places
 import time
 import json
 
 # Create your views here.
+##########################################公共接口################################################################
 def index(request):#入口页
     if request.method == 'POST':  
         temp_name = request.POST['username']
@@ -70,9 +72,6 @@ def logout(request):#退出
     response.delete_cookie("username")
     return response
 
-def addspot(request):#添加景点界面
-    return render(request, 'pages/admin_addplace.html')
-
 def home(request):#去首页
     print("2222222222222222222222222222222222222222")
     cook = request.COOKIES.get('username')
@@ -92,6 +91,7 @@ def home(request):#去首页
 def myinfo(request):#我的界面
     return render(request, 'pages/homepage.html')
 
+##########################################管理员相关接口################################################################
 def addplace(request):#添加地点页面
     cook = request.COOKIES.get('username')
     print('cook:', cook)
@@ -153,3 +153,47 @@ def deluser(request,user_name):
     temp_name=user_name
     Users.objects.filter(name=temp_name).delete()
     return HttpResponseRedirect(reverse('pages:mguser'))
+
+def addspot(request):#添加景点界面
+    return render(request, 'pages/admin_addplace.html')
+
+#########################################用户相关接口#################################################################
+def searchplace(request):#搜索养老地
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    if request.method == 'POST':
+        if 'search' in request.POST:#搜索
+            searchcontent=request.POST['search_content']
+            place_list=Places.objects.filter(Q(name__contains=searchcontent) | Q(keywords__contains=searchcontent) \
+                | Q(introduce__contains=searchcontent)|Q(cost__contains=searchcontent)|Q(traffic__contains=searchcontent)\
+                |Q(price__contains=searchcontent)|Q(spotticket__contains=searchcontent)|Q(hashospital__contains=searchcontent))#从各个字段中搜索要搜索的内容
+            context = {'place_list': place_list}
+            messages.add_message(request,messages.INFO,'以下是“'+searchcontent+'”搜索结果')
+            return render(request, 'pages/homepage.html',context)
+        elif 'highsearch' in request.POST:#高级搜索
+            return render(request, 'pages/highsearch.html',context)
+    return render(request, 'pages/homepage.html')
+
+def highsearch(request):#高级筛选养老地
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    return render(request, 'pages/highsearch.html',context)
+
+def retiregroup(request):#养老圈
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    return render(request, 'pages/retiregroup.html',context)
+
+def shareplace(request,place_name):#分享到养老圈
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    return render(request, 'pages/retiregroup.html',context)
+    
