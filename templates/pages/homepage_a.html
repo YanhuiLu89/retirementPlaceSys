@@ -28,6 +28,10 @@
         overflow: hidden;
         margin:5% auto
     }
+    #pcontent{
+        font-size:28px;
+        color:darkslategrey
+    }
 </style>
 {% endblock %}
 
@@ -36,8 +40,7 @@
         <a id =selectedlink href="{% url 'pages:home' %}">首页</a>
         <a id =link href="{% url 'pages:addplace' %}">添加地点</a> 
         <a id =link href="{% url 'pages:addspot' %}">添加景点</a> 
-        <a id =link  href="{% url 'pages:login' %}">用户管理</a> 
-        <a id =link  href="{% url 'pages:login' %}">留言管理</a> 
+        <a id =link  href="{% url 'pages:mguser' %}">用户管理</a> 
     </div>
 {% endblock %}
 
@@ -45,41 +48,27 @@
     <div id=textcontent>
         {% for place in place_list.all %}
             <h4>{{ place.name }}</h4>
-            <p align="left"><lable id=''>关键词:</label> {{ place.keywords}}</p>
-            <p align="left"><lable id=''>简介:</label> {{ place.introduce}}</p>
-            <p align="left"><lable id=''>价格(元/月):</label>{{place.cost}}</p>
-            <p align="left"><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
-            <p align="left"><lable id=''>交通:</label>
-                <c:if test="${1==2}">航空</c:if>
-                <c:if test="false">高铁</c:if>
-                <c:if test="false">高铁</c:if>
-                <!-- <if condition='${place.traffic_air} is true'>航空</if>
-                <if condition='${place.traffic_highrail} is true'>高铁</if>
-                <if condition='${place.traffic_port} is trues'>高铁</if> -->
-            </p>
-            <p align="left">
+            <p align="left" id=pcontent><lable>关键词:</label> {{ place.keywords}}</p>
+            <p align="left" id=pcontent><lable>简介:</label> {{ place.introduce}}</p>
+            <p align="left" id=pcontent>
                 <tr>
-                    <td>物价:</td>
-                    <td>
-                        <if condition='$place.price eq 0'>高</if>
-                        <if condition='$place.price eq 1'>中</if>
-                        <if condition='$place.price eq 2'>低</if>
-                    </td>
-                    <td></td>
-                    <td>景点门票:</td>
-                    <td>
-                        <if condition='$place.spotticket eq 0'>贵</if>
-                        <if condition='$place.spotticket eq 1'>较贵</if>
-                        <if condition='$place.spotticket eq 2'>便宜</if>
-                        <if condition='$place.spotticket eq 3'>较便宜</if>
-                    </td>
-                    <td></td>
-                    <td>
-                        <if condition='$place.hashospital eq 0'>有三甲医院</if>
-                        <if condition='$place.hashospital eq 1'>无三甲医院</if>
-                    </td>
+                    <td>花费(元/月):</td>
+                    <td>{{place.cost}}</td>
+                    <td>&nbsp&nbsp交通:</td>
+                    <td></td>{{ place.traffic}}</td>
                 </tr>
             </p>
+            <p align="left" id=pcontent>
+                <tr>
+                    <td>物价:</td>
+                    <td>{{place.price}}
+                    <td>&nbsp&nbsp景点门票:</td>
+                    <td>{{place.spotticket}}</td>
+                    <td>&nbsp&nbsp医疗:</td>
+                    <td>{{place.hashospital}}</td>
+                </tr>
+            </p>
+            <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
             <p align="center">
                 <tr>
                     <td><a href="{% url 'pages:editplace' place.name %}">编辑</a></td>

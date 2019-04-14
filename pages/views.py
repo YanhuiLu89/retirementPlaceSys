@@ -74,6 +74,7 @@ def addspot(request):#添加景点界面
     return render(request, 'pages/admin_addplace.html')
 
 def home(request):#去首页
+    print("2222222222222222222222222222222222222222")
     cook = request.COOKIES.get('username')
     print('cook:', cook)
     if cook == None:
@@ -85,6 +86,7 @@ def home(request):#去首页
     if user.usertype == 0:
         return render(request, 'pages/homepage.html',context)
     elif user.usertype == 1:
+        print("11111111111111111111111111111111111111111111111111111111111111111")
         return render(request, 'pages/homepage_a.html',context)
 
 def myinfo(request):#我的界面
@@ -101,11 +103,11 @@ def addplace(request):#添加地点页面
         temp_introduce = request.POST['introduce']
         temp_cost= int(request.POST['cost'])
         temp_traffic_list= request.POST.getlist('traffic') 
-        print('traffic:',temp_traffic_list)
-        temp_price= (int)(request.POST.get('price'))
-        print('temp_price:',temp_price)
-        temp_spotticket= (int)(request.POST.get('spotticket'))
-        temp_hospital= (bool)(request.POST.get('hospital'))
+        temp_traffic_str=' '.join(temp_traffic_list)
+        print('traffic:',temp_traffic_str)
+        temp_price= request.POST.get('price')
+        temp_spotticket= request.POST.get('spotticket')
+        temp_hospital= request.POST.get('hospital')
         print('temp_hospital:',temp_hospital)
 
         if Places.objects.filter(name=temp_name).exists():
@@ -113,8 +115,7 @@ def addplace(request):#添加地点页面
             return render(request, 'pages/admin_addplace.html')
         else:
             place=Places(name=temp_name,keywords=temp_keywords,introduce=temp_introduce,cost=temp_cost,\
-                traffic_highrail='highrail' in temp_traffic_list,traffic_air='air' in temp_traffic_list,\
-                traffic_port='port' in temp_traffic_list,price=temp_price,spotticket=temp_spotticket,\
+                traffic=temp_traffic_str,price=temp_price,spotticket=temp_spotticket,\
                 hashospital=temp_hospital,publishtime=timezone.now())
             place.save()
             return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新添加的内容
@@ -133,3 +134,22 @@ def delplace(request,place_name):#删除地点
 
 def editplace(request,place_name):#编辑地点
     return HttpResponseRedirect(reverse('pages:home'))
+
+#管理用户
+def mguser(request):
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    user_list = Users.objects.filter(usertype=0)#只管理非管理员账户
+    context = {'user_list': user_list}
+    return render(request, 'pages/mguser.html',context)
+
+def deluser(request,user_name):
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_name=user_name
+    Users.objects.filter(name=temp_name).delete()
+    return HttpResponseRedirect(reverse('pages:mguser'))

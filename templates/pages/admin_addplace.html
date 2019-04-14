@@ -23,11 +23,10 @@
 
 {% block topmenucenter %}
     <div style="padding:20px">
-        <a id =link href=="{% url 'pages:home' %}">首页</a>
+        <a id =link href="{% url 'pages:home' %}">首页</a>
         <a id =selectedlink href="{% url 'pages:addplace' %}">添加地点</a> 
         <a id =link href="{% url 'pages:addspot' %}">添加景点</a> 
-        <a id =link  href="{% url 'pages:login' %}">用户管理</a> 
-        <a id =link  href="{% url 'pages:login' %}">留言管理</a> 
+        <a id =link  href="{% url 'pages:mguser' %}">用户管理</a> 
     </div>
 {% endblock %}
 
@@ -54,33 +53,33 @@
                     <tr>
                         <td style="width:20%">交通：</td>
                         <td style="width:80%">
-                            <label><input name="traffic" type="checkbox" value="highrail" checked="checked" color=white/>高铁 </label> 
-                            <label><input name="traffic" type="checkbox" value="air" />航空 </label> 
-                            <label><input name="traffic" type="checkbox" value="port" />港口 </label> 
+                            <label><input name="traffic" type="checkbox" value="高铁" checked="checked" color=white/>高铁 </label> 
+                            <label><input name="traffic" type="checkbox" value="航空" />航空 </label> 
+                            <label><input name="traffic" type="checkbox" value="港口" />港口 </label> 
                         </td>
                     </tr>  
                     <tr>
                         <td style="width:20%">物价：</td>
                         <td style="width:80%">
-                            <label><input name="price" type="radio"" checked="checked" value="0" />高 </label> 
-                            <label><input name="price" type="radio"" value="1" />中 </label> 
-                            <label><input name="price" type="radio"" value="2" />低 </label> 
+                            <label><input name="price" type="radio"" checked="checked" value="高" />高 </label> 
+                            <label><input name="price" type="radio"" value="中" />中 </label> 
+                            <label><input name="price" type="radio"" value="低" />低 </label> 
                         </td>
                     </tr>
                     <tr>
                         <td style="width:20%">景点门票：</td>
                         <td style="width:80%">
-                            <label><input name="spotticket" type="radio"" checked="checked" value="0" />贵 </label> 
-                            <label><input name="spotticket" type="radio"" value="1" />比较贵 </label> 
-                            <label><input name="spotticket" type="radio"" value="2" />便宜 </label> 
-                            <label><input name="spotticket" type="radio"" value="3" />比较便宜 </label> 
+                            <label><input name="spotticket" type="radio"" checked="checked" value="贵" />贵 </label> 
+                            <label><input name="spotticket" type="radio"" value="较贵" />较贵 </label> 
+                            <label><input name="spotticket" type="radio"" value="便宜" />便宜 </label> 
+                            <label><input name="spotticket" type="radio"" value="较便宜" />较便宜 </label> 
                         </td>
                     </tr>
                     <tr>
                         <td style="width:20%">医疗：</td>
                         <td style="width:80%">
-                            <label><input name="hospital" type="radio"" checked="checked" value="0" />有三甲医院 </label> 
-                            <label><input name="hospital" type="radio"" value="1" />无三甲医院 </label> 
+                            <label><input name="hospital" type="radio"" checked="checked" value="有三甲医院" />有三甲医院 </label> 
+                            <label><input name="hospital" type="radio"" value="无三甲医院" />无三甲医院 </label> 
                         </td>
                     </tr>
                 <tr>
