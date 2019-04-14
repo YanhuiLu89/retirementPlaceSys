@@ -30,20 +30,59 @@
 {% endblock %}
 {% block topmenucenter %}
     <div style="padding:20px">
-        <a id =selectedlink href="{% url 'pages:home' %}">首页</a>
-		<a id =link href="{% url 'pages:highsearch' %}">高级筛选</a>
+        <a id =link href="{% url 'pages:home' %}">首页</a>
+		<a id =selectedlink href="{% url 'pages:highsearch' %}">高级筛选</a>
 		<a id =link  href="{% url 'pages:retiregroup' %}">养老圈</a> 
     </div>
 {% endblock %}
 
 {% block contentbody %}
     <div style="margin: 10% 20%;">
-        <form enctype='multipart/form-data' action="{% url 'pages:searchplace' %}" method="post" name='searchplace' >{% csrf_token %}
+        <form enctype='multipart/form-data' action="{% url 'pages:highsearch' %}" method="post" name='highsearch' >{% csrf_token %}
             <table>
                 <tr>
-                    <td><input type="text" id="search" name="search_content" placeholder="请输入您要搜索的内容" style="width:600px; height:30px" autofocus required /></td>
-                    <td><input type="submit" name='search' value="搜索" style="width:80px; height:50px"></td>
-                    <td><input type="submit" name='highsearch' value="高级筛选" style="width:80px; height:50px"></td>
+                    <td></td>
+                    <td><input type="submit" name='highsearch' value="高级筛选" style="width:100%; height:40px;float:right"></td>
+                </tr>
+                <tr>
+                    <td style="width:20%">关键词：</td>
+                    <td style="width:80%"><input type="text" id="id_name" name="keywords" placeholder="请输入关键词，比如诗歌之下乡，临海等" style="width:100%; height:60px"  /></td>
+                </tr>
+                <tr>
+                    <td>费用：</td>
+                    <td><input type="text" id="id_name" name="cost" placeholder="请输入价格(元/月）" style="width:100%; height:60px" /></td>
+                </tr>
+                <tr>
+                    <td style="width:20%">交通：</td>
+                    <td style="width:80%">
+                        <label><input name="traffic" type="checkbox" value="高铁" />高铁 </label> 
+                        <label><input name="traffic" type="checkbox" value="航空" />航空 </label> 
+                        <label><input name="traffic" type="checkbox" value="港口" />港口 </label> 
+                    </td>
+                </tr>  
+                <tr>
+                    <td style="width:20%">物价：</td>
+                    <td style="width:80%">
+                        <label><input name="price" type="radio""  value="高" />高 </label> 
+                        <label><input name="price" type="radio"" value="中" />中 </label> 
+                        <label><input name="price" type="radio"" value="低" />低 </label> 
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:20%">景点门票：</td>
+                    <td style="width:80%">
+                        <label><input name="spotticket" type="radio"" value="贵" />贵 </label> 
+                        <label><input name="spotticket" type="radio"" value="较贵" />较贵 </label> 
+                        <label><input name="spotticket" type="radio"" value="便宜" />便宜 </label> 
+                        <label><input name="spotticket" type="radio"" value="较便宜" />较便宜 </label> 
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:20%">医疗：</td>
+                    <td style="width:80%">
+                        <label><input name="hospital" type="radio"" value="有三甲医院" />有三甲医院 </label> 
+                        <label><input name="hospital" type="radio"" value="无三甲医院" />无三甲医院 </label> 
+                    </td>
                 </tr>
             </table>
         </form>
@@ -70,10 +109,10 @@
                         <td>{{place.hashospital}}</td>
                     </tr>
                 </p>
-                <p align="center">
-                    <a href="{% url 'pages:shareplace' place.name %}">分享</a></td>  
-                </p>
                 <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
+                <p align="center">
+                        <a href="{% url 'pages:shareplace' place.name %}">分享</a></td>  
+                </p>
             {% endfor %}
         </div>
     </div>

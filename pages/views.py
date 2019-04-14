@@ -116,7 +116,7 @@ def addplace(request):#添加地点页面
         else:
             place=Places(name=temp_name,keywords=temp_keywords,introduce=temp_introduce,cost=temp_cost,\
                 traffic=temp_traffic_str,price=temp_price,spotticket=temp_spotticket,\
-                hashospital=temp_hospital,publishtime=timezone.now())
+                hospital=temp_hospital,publishtime=timezone.now())
             place.save()
             return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新添加的内容
 
@@ -173,14 +173,59 @@ def searchplace(request):#搜索养老地
             messages.add_message(request,messages.INFO,'以下是“'+searchcontent+'”搜索结果')
             return render(request, 'pages/homepage.html',context)
         elif 'highsearch' in request.POST:#高级搜索
+            place_list = Places.objects.all()
+            context = {'place_list': place_list}
             return render(request, 'pages/highsearch.html',context)
     return render(request, 'pages/homepage.html')
 
 def highsearch(request):#高级筛选养老地
     cook = request.COOKIES.get('username')
-    print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
+    print('post:', request.POST)
+    temp_keyword=request.POST['keywords']
+
+    filter_count=0
+    place_list=Places.objects.all()
+
+    if temp_keyword!=None and temp_keyword!='':
+        temp_keyword=request.POST['keywords']
+        place_list=place_list.filter(keywords__contains=temp_keyword)
+        filter_count+=1
+
+    temp_cost= request.POST['cost']
+    if temp_cost!=None and temp_cost!='':
+        temp_cost= int(temp_cost)
+        print('temp_cost',temp_cost)
+        place_list=place_list.filter(cost__range=(temp_cost-500,temp_cost+500))#对于cost的搜索上下500
+        filter_count+=1
+
+    temp_traffic_list= request.POST.getlist('traffic') 
+    if temp_traffic_list!=None and len(temp_traffic_list)>0:
+        temp_traffic_str=' '.join(temp_traffic_list)
+        place_list=place_list.filter(traffic__contains=temp_traffic_str)#
+        filter_count+=1
+
+    temp_price= request.POST.get('price')
+    if temp_price!=None and temp_price!='':
+        place_list=place_list.filter(price=temp_price)#
+        filter_count+=1
+
+    temp_spotticket= request.POST.get('spotticket')
+    if temp_spotticket!=None and temp_spotticket!='':
+        place_list=place_list.filter(spotticket=temp_spotticket)#
+        filter_count+=1
+
+    temp_hospital= request.POST.get('hospital')
+    if temp_hospital!=None and temp_hospital!='':
+        place_list=place_list.filter(hospital=temp_hospital)#
+        filter_count+=1
+    
+    if filter_count==0:
+        messages.add_message(request,messages.ERROR,'至少要有一个筛选条件')
+    if len(place_list)==0:
+       messages.add_message(request,messages.ERROR,'没有符合条件的搜索结果')
+    context = {'place_list': place_list}
     return render(request, 'pages/highsearch.html',context)
 
 def retiregroup(request):#养老圈

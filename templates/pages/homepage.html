@@ -45,7 +45,7 @@
         <form enctype='multipart/form-data' action="{% url 'pages:searchplace' %}" method="post" name='searchplace' >{% csrf_token %}
             <table>
                 <tr>
-                    <td><input type="text" id="search" name="search_content" placeholder="请输入您要搜索的内容" style="width:600px; height:30px" autofocus required /></td>
+                    <td><input type="text" id="search" name="search_content" placeholder="请输入您要搜索的内容" style="width:600px; height:30px"/></td>
                     <td><input type="submit" name='search' value="搜索" style="width:80px; height:50px"></td>
                     <td><input type="submit" name='highsearch' value="高级筛选" style="width:80px; height:50px"></td>
                 </tr>
