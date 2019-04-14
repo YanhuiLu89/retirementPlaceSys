@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block head %}  
@@ -44,10 +45,47 @@
     <div id=textcontent>
         {% for place in place_list.all %}
             <h4>{{ place.name }}</h4>
-            <p><lable id='简介:'></label> {{ place.introduce}}</p>
-            <p><lable id='价格:'></label>{{place.price}}</p>
-            <p><lable id='发布时间:'></lable> {{place.publishtime}}</p>
-            <input type="submit" value="编辑" style="width:120px; height:30px;float:right" >
+            <p align="left"><lable id=''>关键词:</label> {{ place.keywords}}</p>
+            <p align="left"><lable id=''>简介:</label> {{ place.introduce}}</p>
+            <p align="left"><lable id=''>价格(元/月):</label>{{place.cost}}</p>
+            <p align="left"><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
+            <p align="left"><lable id=''>交通:</label>
+                <c:if test="${1==2}">航空</c:if>
+                <c:if test="false">高铁</c:if>
+                <c:if test="false">高铁</c:if>
+                <!-- <if condition='${place.traffic_air} is true'>航空</if>
+                <if condition='${place.traffic_highrail} is true'>高铁</if>
+                <if condition='${place.traffic_port} is trues'>高铁</if> -->
+            </p>
+            <p align="left">
+                <tr>
+                    <td>物价:</td>
+                    <td>
+                        <if condition='$place.price eq 0'>高</if>
+                        <if condition='$place.price eq 1'>中</if>
+                        <if condition='$place.price eq 2'>低</if>
+                    </td>
+                    <td></td>
+                    <td>景点门票:</td>
+                    <td>
+                        <if condition='$place.spotticket eq 0'>贵</if>
+                        <if condition='$place.spotticket eq 1'>较贵</if>
+                        <if condition='$place.spotticket eq 2'>便宜</if>
+                        <if condition='$place.spotticket eq 3'>较便宜</if>
+                    </td>
+                    <td></td>
+                    <td>
+                        <if condition='$place.hashospital eq 0'>有三甲医院</if>
+                        <if condition='$place.hashospital eq 1'>无三甲医院</if>
+                    </td>
+                </tr>
+            </p>
+            <p align="center">
+                <tr>
+                    <td><a href="{% url 'pages:editplace' place.name %}">编辑</a></td>
+                    <td> <a href="{% url 'pages:delplace' place.name %}">删除</a></td>  
+                </tr>
+            </p>
         {% endfor %}
     </div>
 {% endblock %}

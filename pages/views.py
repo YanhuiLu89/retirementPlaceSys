@@ -100,7 +100,7 @@ def addplace(request):#添加地点页面
         temp_keywords =request.POST['keywords']
         temp_introduce = request.POST['introduce']
         temp_cost= int(request.POST['cost'])
-        temp_traffic_list= request.POST.getlist('Traffic') 
+        temp_traffic_list= request.POST.getlist('traffic') 
         print('traffic:',temp_traffic_list)
         temp_price= (int)(request.POST.get('price'))
         print('temp_price:',temp_price)
@@ -118,6 +118,18 @@ def addplace(request):#添加地点页面
                 hashospital=temp_hospital,publishtime=timezone.now())
             place.save()
             return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新添加的内容
-            
+
         return render(request, 'pages/admin_addplace.html')
     return render(request,'pages/admin_addplace.html')
+
+def delplace(request,place_name):#删除地点
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_name=place_name
+    Places.objects.filter(name=temp_name).delete()
+    return HttpResponseRedirect(reverse('pages:home'))
+
+def editplace(request,place_name):#编辑地点
+    return HttpResponseRedirect(reverse('pages:home'))
