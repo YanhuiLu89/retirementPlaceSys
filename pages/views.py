@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from .models import Users,Places
 import time
+import json
 
 # Create your views here.
 def index(request):#入口页
@@ -28,9 +29,6 @@ def index(request):#入口页
         return render(request,'pages/index.html')
     return render(request,'pages/index.html')
 
-def logout(request):#退出
-    return render(request,'pages/index.html')
-
 def login(request):#登陆
     if request.method == 'POST':
         name = request.POST['username']
@@ -45,10 +43,17 @@ def login(request):#登陆
             print(user.password+",%d" % user.usertype)
             if user.password==password and user.usertype==usertype:
                 print("2222222222222222222")
+                place_list = Places.objects.all()
+                context = {'place_list': place_list}
+                request.session['is_login'] = 'true'
+                request.session['username'] = user.name
                 if user.usertype==1:
-                    return render(request, 'pages/homepage_a.html',placelist())#跳到管理员首页界面
+                    response=render(request, 'pages/homepage_a.html',context)#跳到管理员首页界面
                 else:
-                    return render(request, 'pages/homepage.html',placelist())#跳到会员首页界面
+                    response=render(request, 'pages/homepage.html',context)#跳到会员首页界面
+                #set cookie
+                response.set_cookie('username', json.dumps(user.name))#中文字符串直接设置到cooki有问题要用json转一下
+                return response
             else:
                 messages.add_message(request,messages.ERROR,'用户密码或身份类型错误错误')
                 return render(request, 'pages/login.html')
@@ -58,33 +63,61 @@ def login(request):#登陆
             return render(request, 'pages/login.html')
     return render(request, 'pages/login.html')
 
-def placelist():#地址列表
-    place_list = Places.objects.all()
-    context = {'place_list': place_list}
-    return context
+def logout(request):#退出
+    request.session.delete()
+    request.session.flush() 
+    response=render(request, 'pages/index.html')
+    response.delete_cookie("username")
+    return response
 
 def addspot(request):#添加景点界面
     return render(request, 'pages/admin_addplace.html')
 
 def home(request):#去首页
-    return render(request, 'pages/homepage.html')
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    username=json.loads(cook)
+    user = Users.objects.get(name = username)
+    place_list = Places.objects.all()
+    context = {'place_list': place_list}
+    if user.usertype == 0:
+        return render(request, 'pages/homepage.html',context)
+    elif user.usertype == 1:
+        return render(request, 'pages/homepage_a.html',context)
 
 def myinfo(request):#我的界面
     return render(request, 'pages/homepage.html')
 
 def addplace(request):#添加地点页面
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
     if request.method == 'POST':
-        name = request.POST['name']
-        introduce = request.POST['introduce']
-        price= int(request.POST['price'])
+        temp_name = request.POST['name']
+        temp_keywords =request.POST['keywords']
+        temp_introduce = request.POST['introduce']
+        temp_cost= int(request.POST['cost'])
+        temp_traffic_list= request.POST.getlist('Traffic') 
+        print('traffic:',temp_traffic_list)
+        temp_price= (int)(request.POST.get('price'))
+        print('temp_price:',temp_price)
+        temp_spotticket= (int)(request.POST.get('spotticket'))
+        temp_hospital= (bool)(request.POST.get('hospital'))
+        print('temp_hospital:',temp_hospital)
 
-        if name!="":
-            place=Places(name=name,introduce=introduce,price=price,publishtime=timezone.now())
-            place.save()
-            messages.add_message(request,messages.INFO,'添加成功')
+        if Places.objects.filter(name=temp_name).exists():
+            messages.add_message(request,messages.ERROR,'该课题已经存在')
             return render(request, 'pages/admin_addplace.html')
         else:
-            messages.add_message(request,messages.INFO,'名称不能为空')
-            return render(request, 'pages/admin_addplace.html')
+            place=Places(name=temp_name,keywords=temp_keywords,introduce=temp_introduce,cost=temp_cost,\
+                traffic_highrail='highrail' in temp_traffic_list,traffic_air='air' in temp_traffic_list,\
+                traffic_port='port' in temp_traffic_list,price=temp_price,spotticket=temp_spotticket,\
+                hashospital=temp_hospital,publishtime=timezone.now())
+            place.save()
+            return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新添加的内容
+            
         return render(request, 'pages/admin_addplace.html')
     return render(request,'pages/admin_addplace.html')

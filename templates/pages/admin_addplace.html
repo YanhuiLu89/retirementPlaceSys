@@ -33,7 +33,7 @@
 
 {% block contentbody %}
     <div style="width:100%;margin:5% auto">
-        <form enctype='multipart/form-data' action="{% url 'pages:addplace' %}" method="post" name='add' >{% csrf_token %}
+        <form enctype='multipart/form-data' action="{% url 'pages:addplace' %}" method="post" name='addplace' >{% csrf_token %}
             <table align="center" >
                     <tr>
                         <td style="width:20%">名称：</td>
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <td style="width:20%">关键词：</td>
-                        <td style="width:80%"><input type="text" id="id_name" name="name" placeholder="请输入关键词，比如诗歌之下乡，临海等" style="width:100%; height:60px" autofocus required  /></td>
+                        <td style="width:80%"><input type="text" id="id_name" name="keywords" placeholder="请输入关键词，比如诗歌之下乡，临海等" style="width:100%; height:60px" autofocus required  /></td>
                     </tr>
                     <tr>
                         <td>简介：</td>
@@ -49,39 +49,38 @@
                     </tr>
                     <tr>
                         <td>费用：</td>
-                        <td><input type="text" id="id_name" name="Cost" placeholder="请输入价格(元/月）" style="width:100%; height:60px" /></td>
+                        <td><input type="text" id="id_name" name="cost" placeholder="请输入价格(元/月）" style="width:100%; height:60px" /></td>
                     </tr>
                     <tr>
                         <td style="width:20%">交通：</td>
                         <td style="width:80%">
-                            <label><input name="Traffic" type="checkbox" value="" checked="checked"  />高铁 </label> 
-                            <label><input name="Traffic" type="checkbox" value="" />航空 </label> 
-                            <label><input name="Traffic" type="checkbox" value="" />港口 </label> 
+                            <label><input name="traffic" type="checkbox" value="highrail" checked="checked" color=white/>高铁 </label> 
+                            <label><input name="traffic" type="checkbox" value="air" />航空 </label> 
+                            <label><input name="traffic" type="checkbox" value="port" />港口 </label> 
                         </td>
                     </tr>  
                     <tr>
                         <td style="width:20%">物价：</td>
                         <td style="width:80%">
-                            <label><input name="Price" type="radio"" value="" />高 </label> 
-                            <label><input name="Price" type="radio"" value="" />中 </label> 
-                            <label><input name="Price" type="radio"" value="" />低 </label> 
+                            <label><input name="price" type="radio"" checked="checked" value="0" />高 </label> 
+                            <label><input name="price" type="radio"" value="1" />中 </label> 
+                            <label><input name="price" type="radio"" value="2" />低 </label> 
                         </td>
                     </tr>
                     <tr>
                         <td style="width:20%">景点门票：</td>
                         <td style="width:80%">
-                            <label><input name="Price" type="radio"" value="" />贵 </label> 
-                            <label><input name="Price" type="radio"" value="" />比较贵 </label> 
-                            <label><input name="Price" type="radio"" value="" />便宜 </label> 
-                            <label><input name="Price" type="radio"" value="" />比较便宜 </label> 
+                            <label><input name="spotticket" type="radio"" checked="checked" value="0" />贵 </label> 
+                            <label><input name="spotticket" type="radio"" value="1" />比较贵 </label> 
+                            <label><input name="spotticket" type="radio"" value="2" />便宜 </label> 
+                            <label><input name="spotticket" type="radio"" value="3" />比较便宜 </label> 
                         </td>
                     </tr>
                     <tr>
                         <td style="width:20%">医疗：</td>
                         <td style="width:80%">
-                            <label><input name="Hospital" type="radio"" value="" />有三甲医院 </label> 
-                            <label><input name="Hospital" type="radio"" value="" />无三甲医院 </label> 
-                            <label><input name="Hospital" type="radio"" value="" />低 </label> 
+                            <label><input name="hospital" type="radio"" checked="checked" value="0" />有三甲医院 </label> 
+                            <label><input name="hospital" type="radio"" value="1" />无三甲医院 </label> 
                         </td>
                     </tr>
                 <tr>
