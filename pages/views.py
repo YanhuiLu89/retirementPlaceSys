@@ -170,7 +170,7 @@ def searchplace(request):#搜索养老地
                 | Q(introduce__contains=searchcontent)|Q(cost__contains=searchcontent)|Q(traffic__contains=searchcontent)\
                 |Q(price__contains=searchcontent)|Q(spotticket__contains=searchcontent)|Q(hashospital__contains=searchcontent))#从各个字段中搜索要搜索的内容
             context = {'place_list': place_list}
-            messages.add_message(request,messages.INFO,'以下是“'+searchcontent+'”搜索结果')
+            messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
             return render(request, 'pages/homepage.html',context)
         elif 'highsearch' in request.POST:#高级搜索
             place_list = Places.objects.all()
@@ -183,13 +183,11 @@ def highsearch(request):#高级筛选养老地
     if cook == None:
         return  render(request, 'pages/index.html')
     print('post:', request.POST)
-    temp_keyword=request.POST['keywords']
-
     filter_count=0
     place_list=Places.objects.all()
 
+    temp_keyword=request.POST['keywords']
     if temp_keyword!=None and temp_keyword!='':
-        temp_keyword=request.POST['keywords']
         place_list=place_list.filter(keywords__contains=temp_keyword)
         filter_count+=1
 
@@ -223,8 +221,12 @@ def highsearch(request):#高级筛选养老地
     
     if filter_count==0:
         messages.add_message(request,messages.ERROR,'至少要有一个筛选条件')
+        context = {'place_list': contex}
+        return render(request, 'pages/highsearch.html',context)
     if len(place_list)==0:
        messages.add_message(request,messages.ERROR,'没有符合条件的搜索结果')
+    else:
+        messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
     context = {'place_list': place_list}
     return render(request, 'pages/highsearch.html',context)
 
