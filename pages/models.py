@@ -6,6 +6,8 @@ class Users(models.Model):
     name = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     email = models.EmailField()
+    phone=models.CharField(max_length=50,default='')
+    address=models.CharField(max_length=200,default='')
 
 class Places(models.Model):
     name = models.CharField(max_length=100)

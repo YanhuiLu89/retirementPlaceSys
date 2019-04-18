@@ -13,6 +13,7 @@ urlpatterns = [
     path('mguser/', views.mguser, name='mguser'),
     path('deluser/<user_name>', views.deluser, name='deluser'),
     path('myinfo/', views.myinfo, name='myinfo'),
+    path('editmyinfo/', views.editmyinfo, name='editmyinfo'),
     path('home/', views.home, name='home'),
     path('addspot/', views.addspot, name='addspot'),
     path('searchplace/', views.searchplace, name='searchplace'),

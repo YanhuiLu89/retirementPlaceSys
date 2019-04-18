@@ -1,52 +1,51 @@
-{% extends 'base.html' %}
-
-{% block style %}
-    <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+     <!-- 使用CSS样式来控制div布局 -->
+     <style type="text/css">
+        /*定义全局的div布局*/
+        #content{
+            width: 100%;
+            height: 800px;
+            margin:200px auto;
+        }
+        html,body{text-align:center;background:url("/static/images/bg_pic.jpg");background-repeat:repeat}
         input,select{height:30px; width:200px; vertical-align:left;}
+
     </style>
-{% endblock %}
-
-{% block topmenucenter %}
-<br/>
-{% endblock %}
-
-{% block topmenuright %}
-<br/>
-{% endblock %}
-
-{% block head %}
-<br/>
-{% endblock %}
-
-{% block contentbody %}
-    <div style="width:100%;margin:5% 5% 5% 5%">
-            <h2>海南省候鸟式养老信息系统</h2>
-            <form action="{% url 'pages:login' %}" method="post" name='login'>{% csrf_token %}
-               <table align="center">
-                    <tr>
-                        <td>账户：</td>
-                        <td><input type="text" id="id_username" name="username" placeholder="用户名" autofocus required  /></td>
-                    </tr>
-                    <tr>
-                        <td>密码：</td>
-                        <td><input type="password" id="id_password" placeholder="密码" name="password" required  /></td>
-                    </tr>
-                    <tr>
-                        <td>身份：</td>
-                        <td>
-                            <select id="usertype"  name="usertype" panelHeight="auto" >
-                                <option value=0>会员</option>
-                                <option value=1>管理员</option>
-                            </select> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="submit" value="登录" >
-                        </td>
-                    </tr>
-               </table>     
-        </form>
-    </div>
-{% endblock %}
+</head>
+<body>
+    <div id=content>
+        <h2>海南省候鸟式养老信息系统</h2>
+        <form action="{% url 'pages:login' %}" method="post" name='login'>{% csrf_token %}
+           <table align="center">
+                <tr>
+                    <td>账户：</td>
+                    <td><input type="text" id="id_username" name="username" placeholder="用户名" autofocus required  /></td>
+                </tr>
+                <tr>
+                    <td>密码：</td>
+                    <td><input type="password" id="id_password" placeholder="密码" name="password" required  /></td>
+                </tr>
+                <tr>
+                    <td>身份：</td>
+                    <td>
+                        <select id="usertype"  name="usertype" panelHeight="auto" >
+                            <option value=0>会员</option>
+                            <option value=1>管理员</option>
+                        </select> 
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="登录" >
+                    </td>
+                </tr>
+           </table>     
+    </form>
+</div>
+</body>
+</html>
