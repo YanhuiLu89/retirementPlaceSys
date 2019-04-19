@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block head %}
+    <h2>录海南省候鸟式养老系统-编辑</h2>
+{% endblock %}
+
+{% block contentmenu %}
+<table align="center">
+    <tr>
+        <td>
+            <form action="{% url 'pages:toadd' %}" method="post" name='toadd'>{% csrf_token %}
+                <input type="submit" value="添加" style="width:80px; height:30px;float:right" >
+            </form>
+        </td>
+    </tr>
+</table>  
+{% endblock %}
+
+{% block contentbody %}
+    <form enctype='multipart/form-data' action="{% url 'pages:detial' %}" method="post" name='detial' >{% csrf_token %}
+        <div width="90%"  align="center">
+			 {% for place in place_list.all %}
+                <h3>place.name</h3>
+                <h4>place.address</h4>
+                <input type="submit" value="详情" name=place.name "width:120px; height:30px;float:right" >
+                <p>place.introduce</P>
+                <br/>
+                <p>place.time</P>
+                <br/>
+                <p>place.image</P>
+                <br/>
+             {% endfor %}
+        </div>     
+    </form>
+{% endblock %}

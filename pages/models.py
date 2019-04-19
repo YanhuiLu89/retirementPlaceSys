@@ -27,3 +27,9 @@ class Scenicspot(models.Model):
     address = models.CharField(max_length=300)
     image = models.ImageField(upload_to='images')
     opentime = models.CharField(max_length=100)
+
+class Shares(models.Model):
+    user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 外键标志谁分享的
+    place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 外键,分享的是哪个地点
+    text = models.CharField(max_length=500)#分享时写的内容
+    time = models.DateTimeField('date published')#分享时间

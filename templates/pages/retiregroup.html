@@ -30,50 +30,31 @@
 {% endblock %}
 {% block topmenucenter %}
     <div style="padding:20px">
-        <a id =selectedlink href="{% url 'pages:home' %}">首页</a>
+        <a id =link href="{% url 'pages:home' %}">首页</a>
 		<a id =link href="{% url 'pages:highsearch' %}">高级筛选</a>
-		<a id =link  href="{% url 'pages:retiregroup' %}">养老圈</a> 
+		<a id =selectedlink  href="{% url 'pages:retiregroup' %}">养老圈</a> 
     </div>
 {% endblock %}
 
 {% block contentbody %}
     <div style="margin: 10% 20%;">
-        <form enctype='multipart/form-data' action="{% url 'pages:searchplace' %}" method="post" name='searchplace' >{% csrf_token %}
-            <table>
-                <tr>
-                    <td><input type="text" id="search" name="search_content" placeholder="请输入您要搜索的内容" style="width:600px; height:30px" autofocus required /></td>
-                    <td><input type="submit" name='search' value="搜索" style="width:80px; height:50px"></td>
-                    <td><input type="submit" name='highsearch' value="高级筛选" style="width:80px; height:50px"></td>
-                </tr>
-            </table>
-        </form>
-        <div id=textcontent>
-            {% for place in place_list.all %}
-                <h4>{{ place.name }}</h4>
-                <p align="left" id=pcontent><lable>关键词:</label> {{ place.keywords}}</p>
-                <p align="left" id=pcontent><lable>简介:</label> {{ place.introduce}}</p>
-                <p align="left" id=pcontent>
-                    <tr>
-                        <td>花费(元/月):</td>
-                        <td>{{place.cost}}</td>
-                        <td>&nbsp&nbsp交通:</td>
-                        <td></td>{{ place.traffic}}</td>
+        <div>
+            <h4>养老圈</h4>
+            {% for share in share_list.all %}
+                <p align="left" padding="10px"> 
+                <table>
+                    <tr align="left">
+                        <td>{{share.user.name}}</td>
+                        <td>
+                            <table>
+                               <tr align="left"><p align="left">{{share.text}}</p></tr>
+                               <tr align="left"><a  href="{% url 'pages:placedetail'  share.place.id %}">{{share.place.name}}</a></tr>
+                               <tr align="left">{{share.time}}</tr>
+                            </table>
+                        </td>
                     </tr>
+                <table>
                 </p>
-                <p align="left" id=pcontent>
-                    <tr>
-                        <td>物价:</td>
-                        <td>{{place.price}}
-                        <td>&nbsp&nbsp景点门票:</td>
-                        <td>{{place.spotticket}}</td>
-                        <td>&nbsp&nbsp医疗:</td>
-                        <td>{{place.hashospital}}</td>
-                    </tr>
-                </p>
-                <p align="center">
-                    <a href="{% url 'pages:shareplace' place.name %}">分享</a></td>  
-                </p>
-                <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
             {% endfor %}
         </div>
     </div>

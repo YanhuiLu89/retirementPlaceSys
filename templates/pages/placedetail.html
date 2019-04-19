@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block head %}  
+<br/>
+{% endblock %}
+
+{% block style %}
+<style>
+    #link{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:gray;          
+    }
+    #selectedlink{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:black;         
+    }
+    #textcontent {
+        width: 80%;
+        height: auto;
+        word-wrap:break-word;
+        word-break:break-all;
+        overflow: hidden;
+        margin:5% auto
+    }
+</style>
+{% endblock %}
+{% block topmenucenter %}
+    <div style="padding:20px">
+        <a id =link href="{% url 'pages:home' %}">首页</a>
+		<a id =link href="{% url 'pages:highsearch' %}">高级筛选</a>
+		<a id =selectedlink  href="{% url 'pages:retiregroup' %}">养老圈</a> 
+    </div>
+{% endblock %}
+
+{% block contentbody %}
+    <div style="text-align:center;margin: 10% 10% 10% 10%" >
+        <h4>{{ place.name }}</h4>
+            <p align="left" id=pcontent><lable>关键词:</label> {{ place.keywords}}</p>
+            <p align="left" id=pcontent><lable>简介:</label> {{ place.introduce}}</p>
+            <p align="left" id=pcontent>
+                <tr>
+                    <td>花费(元/月):</td>
+                    <td>{{place.cost}}</td>
+                    <td>&nbsp&nbsp交通:</td>
+                    <td>{{ place.traffic}}</td>
+                </tr>
+            </p>
+            <p align="left" id=pcontent>
+                <tr>
+                    <td>物价:</td>
+                    <td>{{place.price}}
+                    <td>&nbsp&nbsp景点门票:</td>
+                    <td>{{place.spotticket}}</td>
+                    <td>&nbsp&nbsp医疗:</td>
+                    <td>{{place.hashospital}}</td>
+                </tr>
+            </p>
+        <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
+    </div>
+{% endblock %}
