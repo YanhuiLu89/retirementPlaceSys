@@ -22,10 +22,10 @@
 {% endblock %}
 {% block topmenucenter %}
     <div style="padding:20px">
-        <a id =link href="{% url 'pages:home' %}">首页</a>
-        <a id =link href="{% url 'pages:addplace' %}">添加地点</a> 
-        <a id =link href="{% url 'pages:addspot' %}">添加景点</a> 
-        <a id =link  href="{% url 'pages:mguser' %}">用户管理</a>  
+        <a id =link_center href="{% url 'pages:home' %}">首页</a>
+        <a id =link_center href="{% url 'pages:mgplace' %}">地点管理</a> 
+        <a id =link_center href="{% url 'pages:mgspot' %}">景点管理</a> 
+        <a id =link_center  href="{% url 'pages:mguser' %}">用户管理</a>  
     </div>
 {% endblock %}
 

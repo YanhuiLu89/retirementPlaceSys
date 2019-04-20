@@ -9,7 +9,6 @@ from django.db.models import Q
 
 from .models import Users,Places,Scenicspot,Shares
 import time
-import json
 
 # Create your views here.
 ##########################################公共接口################################################################
@@ -28,7 +27,7 @@ def index(request):#入口页
         user = Users(usertype=0,name=temp_name, password=temp_psw, email=temp_mail)
         user.save()
         messages.add_message(request,messages.INFO,'注册成功')
-        return render(request,'pages/index.html')
+        return render(request,'pages/login.html')
     return render(request,'pages/index.html')
 
 def login(request):#登陆
@@ -48,13 +47,13 @@ def login(request):#登陆
                 place_list = Places.objects.all().order_by('-publishtime')
                 context = {'place_list': place_list}
                 request.session['is_login'] = 'true'
-                request.session['username'] = user.name
+                request.session['usermail'] = user.email
                 if user.usertype==1:
                     response=render(request, 'pages/homepage_a.html',context)#跳到管理员首页界面
                 else:
                     response=render(request, 'pages/homepage.html',context)#跳到会员首页界面
                 #set cookie
-                response.set_cookie('username', json.dumps(user.name))#中文字符串直接设置到cooki有问题要用json转一下
+                response.set_cookie('usermail', user.email)
                 return response
             else:
                 messages.add_message(request,messages.ERROR,'用户密码或身份类型错误错误')
@@ -69,32 +68,27 @@ def logout(request):#退出
     request.session.delete()
     request.session.flush() 
     response=render(request, 'pages/index.html')
-    response.delete_cookie("username")
+    response.delete_cookie("usermail")
     return response
 
 def home(request):#去首页
-    print("2222222222222222222222222222222222222222")
-    cook = request.COOKIES.get('username')
-    print('cook:', cook)
+    cook = request.COOKIES.get('usermail')
     if cook == None:
         return  render(request, 'pages/index.html')
-    username=json.loads(cook)
-    user = Users.objects.get(name = username)
     place_list = Places.objects.all().order_by('-publishtime')
     context = {'place_list': place_list}
+    user = Users.objects.get(email = cook)
     if user.usertype == 0:
         return render(request, 'pages/homepage.html',context)
     elif user.usertype == 1:
-        print("11111111111111111111111111111111111111111111111111111111111111111")
         return render(request, 'pages/homepage_a.html',context)
 
 def myinfo(request):#我的界面
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
-    username=json.loads(cook)
-    user = Users.objects.get(name = username)
+    user = Users.objects.get(email = cook)
     content={'my':user}
     if user.usertype==0:
         return render(request, 'pages/my.html',content)
@@ -102,19 +96,16 @@ def myinfo(request):#我的界面
         return render(request, 'pages/my_a.html',content)
 
 def editmyinfo(request):#我的界面
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
-    username=json.loads(cook)
-    user = Users.objects.get(name = username)
+    user = Users.objects.get(email = cook)
     if request.method == 'POST':
         temp_name=request.POST.get('name')
-        temp_email=request.POST.get('email')
         temp_phone=request.POST.get('phone')
         temp_address=request.POST.get('address')
         user.name=temp_name
-        user.email=temp_email
         user.phone=temp_phone
         user.address=temp_address
         user.save()
@@ -123,7 +114,7 @@ def editmyinfo(request):#我的界面
     return  render(request,'pages/editmyinfo.html',content)
 
 def placedetail(request,place_id):#我的界面
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -132,10 +123,27 @@ def placedetail(request,place_id):#我的界面
     context={'place':place}
     return  render(request,'pages/placedetail.html',context)
 
-##########################################管理员相关接口################################################################
+##########################################管理员相关接口################################################################d
+def mgplace(request):
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    place_list = Places.objects.all().order_by('-publishtime')
+    context = {'place_list': place_list}
+    return render(request, 'pages/mgplace.html',context)#跳到地点管理界面
+
+def mgspot(request):
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    spot_list = Scenicspot.objects.all().order_by('-id')
+    context = {'spot_list': spot_list}
+    return render(request, 'pages/mgspot.html',context)#跳到地点管理界面
+
 def addplace(request):#添加地点页面
-    print('addplace:', addspot)
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -160,22 +168,20 @@ def addplace(request):#添加地点页面
                 traffic=temp_traffic_str,price=temp_price,spotticket=temp_spotticket,\
                 hospital=temp_hospital,publishtime=timezone.now())
             place.save()
-            return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新添加的内容
-
-        return render(request, 'pages/admin_addplace.html')
-    return render(request,'pages/admin_addplace.html')
+            return HttpResponseRedirect(reverse('pages:mgplace'))
+    return render(request, 'pages/admin_addplace.html')
 
 def delplace(request,place_id):#删除地点
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
     temp_id=place_id
     Places.objects.filter(id=temp_id).delete()
-    return HttpResponseRedirect(reverse('pages:home'))
+    return HttpResponseRedirect(reverse('pages:mgplace'))
 
 def editplace(request,place_id):#编辑地点
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -193,13 +199,13 @@ def editplace(request,place_id):#编辑地点
         place.hospital= request.POST.get('hospital')
         place.publishtime=timezone.now()
         place.save()
-        return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新修改的内容
+        return HttpResponseRedirect(reverse('pages:mgplace'))#重定向到首页，显示新修改的内容
     content={'place':place}
     return render(request,'pages/admin_editplace.html',content)
 
 def addspot(request):#添加景点页面
 
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -222,15 +228,52 @@ def addspot(request):#添加景点页面
             scenicspot=Scenicspot(place=temp_place,name=temp_name,introduce=temp_introduce,\
                 address=temp_address,opentime=temp_opentime,image=temp_image)
             scenicspot.save()
-            messages.add_message(request,messages.INFO,'添加成功，可继续添加')
-            return render(request, 'pages/admin_addspot.html',content)
+            return HttpResponseRedirect(reverse('pages:mgspot'))
         return render(request, 'pages/admin_addplace.html')
     print('addspot1:' ,addspot)
     return render(request,'pages/admin_addspot.html',content)
 
+def editspot(request,spot_id):
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=spot_id
+    spot=Scenicspot.objects.get(id=temp_id)
+    if request.method == 'POST':
+        temp_name = request.POST['name']
+        temp_place=Places.objects.get(name=request.POST['placename'])
+        temp_address =request.POST['address']
+        temp_opentime =request.POST['time']
+        temp_introduce = request.POST['introduce']
+        if 'image' in request.FILES:
+            temp_image=request.FILES['image']
+        else:
+            temp_image=''
+        spot.name=temp_name
+        spot.place=temp_place
+        spot.introduce=temp_introduce
+        spot.address=temp_address
+        spot.opentime=temp_opentime
+        spot.image=temp_image
+        spot.save()
+        return HttpResponseRedirect(reverse('pages:mgspot'))
+    placelist=Places.objects.all()
+    context={'spot':spot,'place_list':placelist}
+    return render(request,'pages/admin_editspot.html',context)
+
+def delspot(request,spot_id):   
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=spot_id
+    Scenicspot.objects.filter(id=temp_id).delete()
+    return HttpResponseRedirect(reverse('pages:mgspot'))
+
 #管理用户
 def mguser(request):
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -238,18 +281,18 @@ def mguser(request):
     context = {'user_list': user_list}
     return render(request, 'pages/mguser.html',context)
 
-def deluser(request,user_name):
-    cook = request.COOKIES.get('username')
+def deluser(request,user_id):
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
-    temp_name=user_name
-    Users.objects.filter(name=temp_name).delete()
+    temp_id=user_id
+    Users.objects.filter(id=temp_id).delete()
     return HttpResponseRedirect(reverse('pages:mguser'))
 
 #########################################用户相关接口#################################################################
 def searchplace(request):#搜索养老地
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -270,7 +313,7 @@ def searchplace(request):#搜索养老地
     return render(request, 'pages/homepage.html')
 
 def highsearch(request):#高级筛选养老地
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     if cook == None:
         return  render(request, 'pages/index.html')
     print('post:', request.POST)
@@ -323,7 +366,7 @@ def highsearch(request):#高级筛选养老地
     return render(request, 'pages/highsearch.html')
 
 def searchspot(request,place_id):#搜索某个地点包含的景点
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -335,7 +378,7 @@ def searchspot(request,place_id):#搜索某个地点包含的景点
     return render(request,'pages/spotlist.html',content)
 
 def retiregroup(request):#养老圈
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
@@ -344,27 +387,25 @@ def retiregroup(request):#养老圈
     return render(request, 'pages/retiregroup.html',context)
 
 def toshareplace(request,place_id):#分享到养老圈
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
-    username=json.loads(cook)
-    user = Users.objects.get(name = username)
+    user = Users.objects.get(email = cook)
     temp_id=place_id
     place=Places.objects.get(id=temp_id)
     context={'place':place}
     return render(request, 'pages/share.html',context)
 
 def shareplace(request,place_id):#分享到养老圈
-    cook = request.COOKIES.get('username')
+    cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
     temp_id=place_id
     place=Places.objects.get(id=temp_id)
     if request.method == 'POST':
-        username=json.loads(cook)
-        user = Users.objects.get(name = username)
+        user = Users.objects.get(email = cook)
         temp_text=request.POST['text']
         if 'image' in request.FILES:
             temp_image=request.FILES['image']

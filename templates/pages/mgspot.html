@@ -16,25 +16,33 @@
     }
 </style>
 {% endblock %}
+
 {% block topmenucenter %}
     <div style="padding:20px">
         <a id =link_center href="{% url 'pages:home' %}">首页</a>
-		<a id =link_center href="{% url 'pages:highsearch' %}">高级筛选</a>
-		<a id =link_center  href="{% url 'pages:retiregroup' %}">养老圈</a> 
+        <a id =link_center href="{% url 'pages:mgplace' %}">地点管理</a> 
+        <a id =selectedlink_center href="{% url 'pages:mgspot' %}">景点管理</a> 
+        <a id =link_center  href="{% url 'pages:mguser' %}">用户管理</a> 
     </div>
 {% endblock %}
+
 {% block contentbody %}
-    <h4>共{{ count }}个景点</h4>
     <div style="margin: 5% 5%;">
         <div id=textcontent>
+                <a href="{% url 'pages:addspot' %}"><input type="submit" value="添加景点" style="width:120px; height:30px;float:right" ></a>
             {% for spot in spot_list.all %}
                 <h4>{{ spot.name }}</h4>
                 <img src='{{ MEDIA_URL }}{{ spot.image}}' alt=''/>
-                <!-- <p align="center">/media/{{ spot.image}}</p> -->
                 <p align="left" ><lable>简介:</label> {{ spot.introduce}}</p>
                 <p align="left" id=pcontent><lable>所属养老地:</label> {{ spot.place.name}}</p>
                 <p align="left" id=pcontent><lable>详细地址:</label> {{ spot.address}}</p>
                 <p align="left" id=pcontent><lable>开放时间:</label> {{ spot.opentime}}</p>
+                <p align="center">
+                    <tr>
+                        <td><a href="{% url 'pages:editspot' spot.id %}">编辑</a></td>
+                        <td><a href="{% url 'pages:delspot' spot.id %}">删除</a></td>  
+                    </tr>
+                </p>
             {% endfor %}
         </div>
     </div>
