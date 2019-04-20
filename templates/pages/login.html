@@ -19,6 +19,11 @@
 <body>
     <div id=content>
         <h2>海南省候鸟式养老信息系统</h2>
+        <div>
+            {% for message in messages %}
+                <div class='alert alert-{{message.tags}}' style="color:coral">{{ message }}</div>
+            {% endfor %}
+        </div>
         <form action="{% url 'pages:login' %}" method="post" name='login'>{% csrf_token %}
            <table align="center">
                 <tr>

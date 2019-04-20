@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}  
-<h3>海南省精选候鸟式养老地</h3>
+<<h3>海南省精选候鸟式养老地</h3>>
 {% endblock %}
 
 {% block style %}
@@ -59,7 +59,10 @@
                     </tr>
                 </p>
                 <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
-                <p align="center"><a href="{% url 'pages:shareplace' place.name %}">分享</a></p>
+                <p align="center">
+                    <a href="{% url 'pages:searchspot' place.id %}">当地景点</a>
+                    <a href="{% url 'pages:shareplace' place.id %}">分享</a>
+                </p>
             {% endfor %}
         </div>
     </div>

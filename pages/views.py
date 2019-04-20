@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db.models import Q 
 
-from .models import Users,Places
+from .models import Users,Places,Scenicspot,Shares
 import time
 import json
 
@@ -45,7 +45,7 @@ def login(request):#登陆
             print(user.password+",%d" % user.usertype)
             if user.password==password and user.usertype==usertype:
                 print("2222222222222222222")
-                place_list = Places.objects.all()
+                place_list = Places.objects.all().order_by('-publishtime')
                 context = {'place_list': place_list}
                 request.session['is_login'] = 'true'
                 request.session['username'] = user.name
@@ -80,7 +80,7 @@ def home(request):#去首页
         return  render(request, 'pages/index.html')
     username=json.loads(cook)
     user = Users.objects.get(name = username)
-    place_list = Places.objects.all()
+    place_list = Places.objects.all().order_by('-publishtime')
     context = {'place_list': place_list}
     if user.usertype == 0:
         return render(request, 'pages/homepage.html',context)
@@ -96,7 +96,10 @@ def myinfo(request):#我的界面
     username=json.loads(cook)
     user = Users.objects.get(name = username)
     content={'my':user}
-    return render(request, 'pages/my.html',content)
+    if user.usertype==0:
+        return render(request, 'pages/my.html',content)
+    elif user.usertype==1:
+        return render(request, 'pages/my_a.html',content)
 
 def editmyinfo(request):#我的界面
     cook = request.COOKIES.get('username')
@@ -121,6 +124,7 @@ def editmyinfo(request):#我的界面
 
 ##########################################管理员相关接口################################################################
 def addplace(request):#添加地点页面
+    print('addplace:', addspot)
     cook = request.COOKIES.get('username')
     print('cook:', cook)
     if cook == None:
@@ -151,17 +155,66 @@ def addplace(request):#添加地点页面
         return render(request, 'pages/admin_addplace.html')
     return render(request,'pages/admin_addplace.html')
 
-def delplace(request,place_name):#删除地点
+def delplace(request,place_id):#删除地点
     cook = request.COOKIES.get('username')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
-    temp_name=place_name
-    Places.objects.filter(name=temp_name).delete()
+    temp_id=place_id
+    Places.objects.filter(id=temp_id).delete()
     return HttpResponseRedirect(reverse('pages:home'))
 
-def editplace(request,place_name):#编辑地点
-    return HttpResponseRedirect(reverse('pages:home'))
+def editplace(request,place_id):#编辑地点
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=place_id
+    place=Places.objects.get(id=temp_id)
+    if request.method == 'POST':
+        place.name = request.POST['name']
+        place.keywords =request.POST['keywords']
+        place.introduce = request.POST['introduce']
+        place.cost= int(request.POST['cost'])
+        temp_traffic_list= request.POST.getlist('traffic') 
+        place.traffic=' '.join(temp_traffic_list)
+        place.price= request.POST.get('price')
+        place.spotticket= request.POST.get('spotticket')
+        place.hospital= request.POST.get('hospital')
+        place.publishtime=timezone.now()
+        place.save()
+        return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新修改的内容
+    content={'place':place}
+    return render(request,'pages/admin_editplace.html',content)
+
+def addspot(request):#添加景点页面
+
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    place_list=Places.objects.all().order_by('publishtime')
+    content={'place_list':place_list}
+    if request.method == 'POST':
+        temp_name = request.POST['name']
+        temp_place=Places.objects.get(name=request.POST['placename'])
+        temp_address =request.POST['address']
+        temp_opentime =request.POST['time']
+        temp_introduce = request.POST['introduce']
+        temp_image=request.FILES['image']
+
+        if Scenicspot.objects.filter(name=temp_name).exists():
+            messages.add_message(request,messages.ERROR,'该景点已经存在')
+            return render(request, 'pages/admin_addspot.html',content)
+        else:
+            scenicspot=Scenicspot(place=temp_place,name=temp_name,introduce=temp_introduce,\
+                address=temp_address,opentime=temp_opentime,image=temp_image)
+            scenicspot.save()
+            messages.add_message(request,messages.INFO,'添加成功，可继续添加')
+            return render(request, 'pages/admin_addspot.html',content)
+        return render(request, 'pages/admin_addplace.html')
+    print('addspot1:' ,addspot)
+    return render(request,'pages/admin_addspot.html',content)
 
 #管理用户
 def mguser(request):
@@ -169,7 +222,7 @@ def mguser(request):
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
-    user_list = Users.objects.filter(usertype=0)#只管理非管理员账户
+    user_list = Users.objects.filter(usertype=0).order_by('-id')#只管理非管理员账户
     context = {'user_list': user_list}
     return render(request, 'pages/mguser.html',context)
 
@@ -182,9 +235,6 @@ def deluser(request,user_name):
     Users.objects.filter(name=temp_name).delete()
     return HttpResponseRedirect(reverse('pages:mguser'))
 
-def addspot(request):#添加景点界面
-    return render(request, 'pages/admin_addplace.html')
-
 #########################################用户相关接口#################################################################
 def searchplace(request):#搜索养老地
     cook = request.COOKIES.get('username')
@@ -196,7 +246,8 @@ def searchplace(request):#搜索养老地
             searchcontent=request.POST['search_content']
             place_list=Places.objects.filter(Q(name__contains=searchcontent) | Q(keywords__contains=searchcontent) \
                 | Q(introduce__contains=searchcontent)|Q(cost__contains=searchcontent)|Q(traffic__contains=searchcontent)\
-                |Q(price__contains=searchcontent)|Q(spotticket__contains=searchcontent)|Q(hospital__contains=searchcontent))#从各个字段中搜索要搜索的内容
+                |Q(price__contains=searchcontent)|Q(spotticket__contains=searchcontent)|Q(hospital__contains=searchcontent))\
+                .order_by('-publishtime') #从各个字段中搜索要搜索的内容
             context = {'place_list': place_list}
             messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
             return render(request, 'pages/homepage.html',context)
@@ -254,8 +305,21 @@ def highsearch(request):#高级筛选养老地
        messages.add_message(request,messages.ERROR,'没有符合条件的搜索结果')
     else:
         messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
+    place_lsit=place_list.order_by('-publishtime')
     context = {'place_list': place_list}
     return render(request, 'pages/highsearch.html',context)
+
+def searchspot(request,place_id):#搜索某个地点包含的景点
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=place_id
+    place=Places.objects.get(id=temp_id)
+    spotlist=Scenicspot.objects.filter(place=place)
+    count=len(spotlist)
+    content={'count':count,'spot_list':spotlist}
+    return render(request,'pages/spotlist.html',content)
 
 def retiregroup(request):#养老圈
     cook = request.COOKIES.get('username')
@@ -264,7 +328,7 @@ def retiregroup(request):#养老圈
         return  render(request, 'pages/index.html')
     return render(request, 'pages/retiregroup.html',context)
 
-def shareplace(request,place_name):#分享到养老圈
+def shareplace(request,place_id):#分享到养老圈
     cook = request.COOKIES.get('username')
     print('cook:', cook)
     if cook == None:

@@ -71,8 +71,8 @@
             <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
             <p align="center">
                 <tr>
-                    <td><a href="{% url 'pages:editplace' place.name %}">编辑</a></td>
-                    <td> <a href="{% url 'pages:delplace' place.name %}">删除</a></td>  
+                    <td><a href="{% url 'pages:editplace' place.id %}">编辑</a></td>
+                    <td><a href="{% url 'pages:delplace' place.id %}">删除</a></td>  
                 </tr>
             </p>
         {% endfor %}
