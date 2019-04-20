@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name='[pages]'
 
@@ -20,5 +22,5 @@ urlpatterns = [
     path('highsearch/', views.highsearch, name='highsearch'),
     path('retiregroup/', views.retiregroup, name='retiregroup'),
     path('shareplace/<place_id>', views.shareplace, name='shareplace'),
-    path('searchspot/<place_id>', views.searchspot, name='searchspot'),
+    path('searchsport/<place_id>', views.searchspot, name='searchspot'),
 ]

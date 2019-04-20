@@ -29,7 +29,8 @@
         <div id=textcontent>
             {% for spot in spot_list.all %}
                 <h4>{{ spot.name }}</h4>
-                <p align="center">{{ spot.image}}</p>
+                <img width="300" height="300" src='/media/{{ spot.image}}'/>
+                <!-- <p align="center">media/{{ spot.image}}</p> -->
                 <p align="left" ><lable>简介:</label> {{ spot.introduce}}</p>
                 <p align="left" id=pcontent><lable>所属养老地:</label> {{ spot.place.name}}</p>
                 <p align="left" id=pcontent><lable>详细地址:</label> {{ spot.address}}</p>
