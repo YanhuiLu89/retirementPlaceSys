@@ -15,12 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.conf import settings
 from django.views.static import serve
+from .settings import MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('media/', serve, {"document_root":settings.MEDIA_ROOT}),
     path('pages/', include('pages.urls', namespace='pages')),
+    url(r'^media/(?P<path>.*)', serve, {"document_root":MEDIA_ROOT}),
 ]
