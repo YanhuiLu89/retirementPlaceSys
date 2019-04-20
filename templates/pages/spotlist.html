@@ -29,7 +29,7 @@
         <div id=textcontent>
             {% for spot in spot_list.all %}
                 <h4>{{ spot.name }}</h4>
-                <img src='{{ MEDIA_URL }}{{ spot.image}}'/>
+                <img src='{{ MEDIA_URL }}{{ spot.image}}' alt=''/>
                 <!-- <p align="center">/media/{{ spot.image}}</p> -->
                 <p align="left" ><lable>简介:</label> {{ spot.introduce}}</p>
                 <p align="left" id=pcontent><lable>所属养老地:</label> {{ spot.place.name}}</p>
@@ -37,31 +37,5 @@
                 <p align="left" id=pcontent><lable>开放时间:</label> {{ spot.opentime}}</p>
             {% endfor %}
         </div>
-        <!-- <p>
-            <table>
-                <tr>
-                    <td><input type="text" id="search" name="search_content" placeholder="请输入您要搜索的内容" style="width:600px; height:30px" autofocus required /></td>
-                    <td><input type="submit" name='search' value="搜索" style="width:80px; height:30px"></td>
-                </tr>
-            </table>
-        </p>
-        <table>
-            <tr>
-                <td>名称</td>
-                <td>简介</td>
-                <td>地址</td>
-                <td>开放时间</td>
-                <td>图片</td>
-            </tr>
-            {% for place in place_list.all %}
-                <tr>
-                    <td>{{ place.name }}</td>
-                    <td>{{ place.introduce }}</td>
-                    <td>{{ book.address }}</td>
-                    <td>{{ book.time }}</td>
-                    <td>{{ book.image }}</td>
-                </tr>
-            {% endfor %}
-        </table> -->
     </div>
 {% endblock %}

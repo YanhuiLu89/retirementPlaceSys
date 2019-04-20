@@ -122,6 +122,16 @@ def editmyinfo(request):#我的界面
     content={'my':user}
     return  render(request,'pages/editmyinfo.html',content)
 
+def placedetail(request,place_id):#我的界面
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=place_id
+    place=Places.objects.get(id=temp_id)
+    context={'place':place}
+    return  render(request,'pages/placedetail.html',context)
+
 ##########################################管理员相关接口################################################################
 def addplace(request):#添加地点页面
     print('addplace:', addspot)
@@ -201,8 +211,10 @@ def addspot(request):#添加景点页面
         temp_address =request.POST['address']
         temp_opentime =request.POST['time']
         temp_introduce = request.POST['introduce']
-        temp_image=request.FILES['image']
-
+        if 'image' in request.FILES:
+            temp_image=request.FILES['image']
+        else:
+            temp_image=''
         if Scenicspot.objects.filter(name=temp_name).exists():
             messages.add_message(request,messages.ERROR,'该景点已经存在')
             return render(request, 'pages/admin_addspot.html',content)
@@ -301,13 +313,14 @@ def highsearch(request):#高级筛选养老地
             messages.add_message(request,messages.ERROR,'至少要有一个筛选条件')
             context = {'place_list': contex}
             return render(request, 'pages/highsearch.html',context)
-    if len(place_list)==0:
-       messages.add_message(request,messages.ERROR,'没有符合条件的搜索结果')
-    else:
-        messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
-    place_lsit=place_list.order_by('-publishtime')
-    context = {'place_list': place_list}
-    return render(request, 'pages/highsearch.html',context)
+        if len(place_list)==0:
+            messages.add_message(request,messages.ERROR,'没有符合条件的搜索结果')
+        else:
+            messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
+            place_lsit=place_list.order_by('-publishtime')
+            context = {'place_list': place_list}
+            return render(request, 'pages/highsearch.html',context)
+    return render(request, 'pages/highsearch.html')
 
 def searchspot(request,place_id):#搜索某个地点包含的景点
     cook = request.COOKIES.get('username')
@@ -326,12 +339,40 @@ def retiregroup(request):#养老圈
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
+    sharelist=Shares.objects.all().order_by('-time')
+    context={'share_list':sharelist}
     return render(request, 'pages/retiregroup.html',context)
+
+def toshareplace(request,place_id):#分享到养老圈
+    cook = request.COOKIES.get('username')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    username=json.loads(cook)
+    user = Users.objects.get(name = username)
+    temp_id=place_id
+    place=Places.objects.get(id=temp_id)
+    context={'place':place}
+    return render(request, 'pages/share.html',context)
 
 def shareplace(request,place_id):#分享到养老圈
     cook = request.COOKIES.get('username')
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
-    return render(request, 'pages/retiregroup.html',context)
+    temp_id=place_id
+    place=Places.objects.get(id=temp_id)
+    if request.method == 'POST':
+        username=json.loads(cook)
+        user = Users.objects.get(name = username)
+        temp_text=request.POST['text']
+        if 'image' in request.FILES:
+            temp_image=request.FILES['image']
+        else:
+            temp_image=''
+        share=Shares(user=user,place=place,text=temp_text,image=temp_image,time=timezone.now())
+        share.save()
+        return HttpResponseRedirect(reverse('pages:retiregroup'))
+    context={'place':place}
+    return render(request, 'pages/share.html',context)
     

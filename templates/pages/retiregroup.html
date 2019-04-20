@@ -24,7 +24,8 @@
         word-wrap:break-word;
         word-break:break-all;
         overflow: hidden;
-        margin:5% auto
+        margin:5% auto;
+        font-size: 20px
     }
 </style>
 {% endblock %}
@@ -37,24 +38,21 @@
 {% endblock %}
 
 {% block contentbody %}
-    <div style="margin: 10% 20%;">
-        <div>
-            <h4>养老圈</h4>
+    <h4>养老圈</h4>
+    <div style="margin: 5% 5%;">
+        <div id=textcontent>
             {% for share in share_list.all %}
-                <p align="left" padding="10px"> 
-                <table>
-                    <tr align="left">
-                        <td>{{share.user.name}}</td>
-                        <td>
-                            <table>
-                               <tr align="left"><p align="left">{{share.text}}</p></tr>
-                               <tr align="left"><a  href="{% url 'pages:placedetail'  share.place.id %}">{{share.place.name}}</a></tr>
-                               <tr align="left">{{share.time}}</tr>
-                            </table>
-                        </td>
-                    </tr>
-                <table>
-                </p>
+            <table>
+                <td width="20%">
+                    {{share.user.name}}
+                </td>
+                <td width="80%">
+                    <p align="left" id=pcontent>{{share.text}}</p>
+                    <img width='100%' src='{{ MEDIA_URL }}{{ share.image}}' alt=''/>
+                    <p align="left" width="90%" height="30px" text-overflow="ellipsis"><a  href="{% url 'pages:placedetail' share.place.id  %}">{{share.place.name}}&nbsp&nbsp{{share.place.introduce}}</a></p>
+                    <p align="left" font-size="20px">{{share.time}}</p>
+                </td>
+            </table>
             {% endfor %}
         </div>
     </div>

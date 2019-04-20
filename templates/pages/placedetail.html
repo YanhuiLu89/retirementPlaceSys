@@ -59,6 +59,10 @@
                     <td>{{place.hashospital}}</td>
                 </tr>
             </p>
-        <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
+            <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
+            <p align="center">
+                    <a href="{% url 'pages:searchspot' place.id %}">当地景点</a>
+                    <a href="{% url 'pages:toshareplace' place.id %}">分享</a>
+            </p>
     </div>
 {% endblock %}

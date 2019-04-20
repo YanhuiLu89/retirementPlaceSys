@@ -13,6 +13,7 @@ urlpatterns = [
     path('addplace/', views.addplace, name='addplace'),
     path('delplace/<place_id>', views.delplace, name='delplace'),
     path('editplace/<place_id>', views.editplace, name='editplace'),
+    path('placedetail/<place_id>', views.placedetail, name='placedetail'),
     path('mguser/', views.mguser, name='mguser'),
     path('deluser/<user_name>', views.deluser, name='deluser'),
     path('myinfo/', views.myinfo, name='myinfo'),
@@ -21,6 +22,7 @@ urlpatterns = [
     path('searchplace/', views.searchplace, name='searchplace'),
     path('highsearch/', views.highsearch, name='highsearch'),
     path('retiregroup/', views.retiregroup, name='retiregroup'),
+    path('toshareplace/<place_id>', views.toshareplace, name='toshareplace'),
     path('shareplace/<place_id>', views.shareplace, name='shareplace'),
     path('searchsport/<place_id>', views.searchspot, name='searchspot'),
 ]

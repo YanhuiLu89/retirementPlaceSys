@@ -33,3 +33,4 @@ class Shares(models.Model):
     place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 外键,分享的是哪个地点
     text = models.CharField(max_length=500)#分享时写的内容
     time = models.DateTimeField('date published')#分享时间
+    image = models.ImageField(upload_to='images',default='')
