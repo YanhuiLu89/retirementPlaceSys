@@ -29,4 +29,5 @@ urlpatterns = [
     path('toshareplace/<place_id>', views.toshareplace, name='toshareplace'),
     path('shareplace/<place_id>', views.shareplace, name='shareplace'),
     path('searchsport/<place_id>', views.searchspot, name='searchspot'),
+    path('searchsport/', views.searchspot, name='searchspot'),
 ]

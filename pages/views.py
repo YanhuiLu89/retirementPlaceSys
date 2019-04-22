@@ -377,6 +377,26 @@ def searchspot(request,place_id):#搜索某个地点包含的景点
     content={'count':count,'spot_list':spotlist}
     return render(request,'pages/spotlist.html',content)
 
+def searchspot(request):#景点搜索页面，按关键字搜索
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    if request.method == 'POST':
+        searchcontent=request.POST['search_content']
+        spot_list=Scenicspot.objects.filter(Q(name__contains=searchcontent) | Q(introduce__contains=searchcontent)|Q(address__contains=searchcontent)) #从名称、简介、地址字段中搜索要搜索的内容
+        if len( spot_list)==0:
+            messages.add_message(request,messages.ERROR,'没有符合条件的搜索结果')
+        else:
+            messages.add_message(request,messages.INFO,'共'+str(len( spot_list))+'条结果')
+            content={'spot_list':spot_list}
+            return render(request,'pages/searchspot.html',content)
+
+    spot_list=Scenicspot.objects.all()
+    content={'spot_list':spot_list}
+    return render(request,'pages/searchspot.html',content)
+    
+
 def retiregroup(request):#养老圈
     cook = request.COOKIES.get('usermail')
     print('cook:', cook)
