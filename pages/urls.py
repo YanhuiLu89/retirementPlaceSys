@@ -28,6 +28,6 @@ urlpatterns = [
     path('retiregroup/', views.retiregroup, name='retiregroup'),
     path('toshareplace/<place_id>', views.toshareplace, name='toshareplace'),
     path('shareplace/<place_id>', views.shareplace, name='shareplace'),
-    path('searchspot/<place_id>', views.searchspot, name='searchspot'),
+    path('localspot/<place_id>', views.localspot, name='localspot'),
     path('searchspot/', views.searchspot, name='searchspot'),
 ]

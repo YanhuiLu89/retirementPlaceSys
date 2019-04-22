@@ -40,7 +40,7 @@
                 <h4>{{ spot.name }}</h4>
                 <img src='{{ MEDIA_URL }}{{ spot.image}}' alt=''/>
                 <p align="left" ><lable>简介:</label> {{ spot.introduce}}</p>
-                <p align="left" id=pcontent><lable>所属养老地:</label> <a id =link_center href="{% url 'pages:placedetail' place.id %}">{{ spot.place.name}}</a></p>
+                <p align="left" id=pcontent><lable>所属养老地:</label> <a  href="{% url 'pages:placedetail' spot.place.id %}">{{ spot.place.name}}</a></p>
                 <p align="left" id=pcontent><lable>详细地址:</label> {{ spot.address}}</p>
                 <p align="left" id=pcontent><lable>开放时间:</label> {{ spot.opentime}}</p>
             {% endfor %}

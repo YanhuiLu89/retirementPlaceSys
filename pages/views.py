@@ -365,7 +365,7 @@ def highsearch(request):#高级筛选养老地
             return render(request, 'pages/highsearch.html',context)
     return render(request, 'pages/highsearch.html')
 
-def searchspot(request,place_id):#搜索某个地点包含的景点
+def localspot(request,place_id):#当地景点
     cook = request.COOKIES.get('usermail')
     print('cook:', cook)
     if cook == None:
