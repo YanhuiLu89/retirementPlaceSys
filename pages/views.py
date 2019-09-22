@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db.models import Q 
 
-from .models import Users,Places,Scenicspot,Shares
+from .models import Users,Places,Scenicspot,Shares,Order,Comment
 import time
 
 # Create your views here.
@@ -17,6 +17,7 @@ def index(request):#入口页
         temp_name = request.POST['username']
         temp_psw = request.POST['password']
         temp_mail = request.POST['mail']
+        temp_usertype = int(request.POST['usertype'])
         print( temp_name+","+temp_psw+","+temp_mail)
         if Users.objects.filter(name=temp_name).exists():
             messages.add_message(request,messages.ERROR,'该用户名已经存在')
@@ -24,9 +25,11 @@ def index(request):#入口页
         if Users.objects.filter(email=temp_mail).exists():
             messages.add_message(request,messages.ERROR,'该邮箱已经注册过')
             return render(request,'pages/index.html')
-        user = Users(usertype=0,name=temp_name, password=temp_psw, email=temp_mail)
+        user = Users(usertype=temp_usertype,name=temp_name, password=temp_psw, email=temp_mail)
         user.save()
-        messages.add_message(request,messages.INFO,'注册成功')
+        if 2==temp_usertype:#如果是养老机构会员，要创建对应的养老机构对象
+            place=Places(user=user,publishtime=timezone.now())
+            place.save()
         return render(request,'pages/login.html')
     return render(request,'pages/index.html')
 
@@ -42,7 +45,7 @@ def login(request):#登陆
             user=Users.objects.get(name=name)
             print("%s,%s,%d" % (user.name,user.password,user.usertype))
             print(user.password+",%d" % user.usertype)
-            if user.password==password and user.usertype==usertype:
+            if user.password==password and int(user.usertype)==usertype:
                 print("2222222222222222222")
                 place_list = Places.objects.all().order_by('-publishtime')
                 context = {'place_list': place_list}
@@ -50,13 +53,15 @@ def login(request):#登陆
                 request.session['usermail'] = user.email
                 if user.usertype==1:
                     response=render(request, 'pages/homepage_a.html',context)#跳到管理员首页界面
+                elif user.usertype==2:
+                    response=render(request, 'pages/homepage_c.html',context)#跳到养老机构首页界面
                 else:
                     response=render(request, 'pages/homepage.html',context)#跳到会员首页界面
                 #set cookie
                 response.set_cookie('usermail', user.email)
                 return response
             else:
-                messages.add_message(request,messages.ERROR,'用户密码或身份类型错误错误')
+                messages.add_message(request,messages.ERROR,'用户密码或身份类型错误')
                 return render(request, 'pages/login.html')
         else:
             print("333333333333333333333")
@@ -75,7 +80,7 @@ def home(request):#去首页
     cook = request.COOKIES.get('usermail')
     if cook == None:
         return  render(request, 'pages/index.html')
-    place_list = Places.objects.all().order_by('-publishtime')
+    place_list = Places.objects.filter().order_by('-publishtime')
     context = {'place_list': place_list}
     user = Users.objects.get(email = cook)
     if user.usertype == 0:
@@ -161,7 +166,7 @@ def addplace(request):#添加地点页面
         print('temp_hospital:',temp_hospital)
 
         if Places.objects.filter(name=temp_name).exists():
-            messages.add_message(request,messages.ERROR,'该课题已经存在')
+            messages.add_message(request,messages.ERROR,'该y=养老机构已经存在')
             return render(request, 'pages/admin_addplace.html')
         else:
             place=Places(name=temp_name,keywords=temp_keywords,introduce=temp_introduce,cost=temp_cost,\
@@ -437,3 +442,45 @@ def shareplace(request,place_id):#分享到养老圈
     context={'place':place}
     return render(request, 'pages/share.html',context)
     
+#########################################养老机构相关接口#################################################################
+def mginfo_c(request):#养老机构信息管理地
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    currentuser=Users.objects.get(email=cook)
+    place = Places.objects.get(user=currentuser)
+    context = {'place': place}
+    return render(request, 'pages/mginfo_c.html',context)#跳到地点管理界面
+
+def editinfo_c(request,place_id):#编辑信息
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=place_id
+    place=Places.objects.get(id=temp_id)
+    if request.method == 'POST':
+        place.name = request.POST['name']
+        place.keywords =request.POST['keywords']
+        place.introduce = request.POST['introduce']
+        place.cost= int(request.POST['cost'])
+        temp_traffic_list= request.POST.getlist('traffic') 
+        place.traffic=' '.join(temp_traffic_list)
+        place.price= request.POST.get('price')
+        place.spotticket= request.POST.get('spotticket')
+        place.hospital= request.POST.get('hospital')
+        place.publishtime=timezone.now()
+        place.save()
+        return HttpResponseRedirect(reverse('pages:mginfo_c'))#重定向到首页，显示新修改的内容
+    content={'place':place}
+    return render(request,'pages/editinfo_c.html',content)
+
+def mgorder_c(request):#管理订单
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    place_list = Places.objects.all().order_by('-publishtime')
+    context = {'place_list': place_list}
+    return render(request, 'pages/mgplace.html',context)#跳到地点管理界面

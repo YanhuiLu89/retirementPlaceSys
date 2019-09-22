@@ -24,16 +24,15 @@
 {% block topmenucenter %}
     <div style="padding:20px">
         <a id =link_center href="{% url 'pages:home' %}">首页</a>
-        <a id =link_center href="{% url 'pages:mgspot' %}">景点管理</a>  
-        <a id =link_center  href="{% url 'pages:mguser' %}">个人会员管理</a> 
-        <a id =selectedlink_center  href="{% url 'pages:mgplace' %}">养老机构管理</a> 
+        <a id =selectedlink_center href="{% url 'pages:mginfo_c' %}">信息管理</a> 
+        <a id =link_center href="{% url 'pages:mgorder_c' %}">订单管理</a> 
     </div>
 {% endblock %}
 
 {% block contentbody %}
-    <h4>养老机构管理->养老机构编辑</h4>
+    <h4>信息管理->信息编辑</h4>
     <div style="width:100%;margin:5% auto">
-        <form enctype='multipart/form-data' action="{% url 'pages:editplace' place.id%}" method="post" name='editplace' >{% csrf_token %}
+        <form enctype='multipart/form-data' action="{% url 'pages:editinfo_c' place.id%}" method="post" name='editinfo_c' >{% csrf_token %}
             <table align="center" >
                     <tr>
                         <td style="width:20%">名称：</td>

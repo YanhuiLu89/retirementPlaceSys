@@ -1,0 +1,76 @@
+
+{% extends 'base.html' %}
+
+{% block head %}  
+<br/>
+{% endblock %}
+
+{% block style %}
+<style>
+    #link{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:gray;          
+    }
+    #selectedlink{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:black;         
+    }
+    
+    #textcontent {
+        width: 80%;
+        height: auto;
+        word-wrap:break-word;
+        word-break:break-all;
+        overflow: hidden;
+        margin:5% auto
+    }
+    #pcontent{
+        font-size:28px;
+        color:darkslategrey
+    }
+</style>
+{% endblock %}
+
+{% block topmenucenter %}
+    <div style="padding:20px">
+        <a id =link_center href="{% url 'pages:home' %}">首页</a>
+        <a id =selectedlink_center href="{% url 'pages:mginfo_c' %}">信息管理</a> 
+        <a id =link_center href="{% url 'pages:mgorder_c' %}">订单管理</a> 
+    </div>
+{% endblock %}
+
+{% block contentbody %}
+    <div id=textcontent>
+        <h4>{{ place.name }}</h4>
+        <p align="left" id=pcontent><lable>关键词:</label> {{ place.keywords}}</p>
+        <p align="left" id=pcontent><lable>简介:</label> {{ place.introduce}}</p>
+        <p align="left" id=pcontent>
+            <tr>
+                <td>花费(元/月):</td>
+                <td>{{place.cost}}</td>
+                <td>&nbsp&nbsp交通:</td>
+                <td></td>{{ place.traffic}}</td>
+            </tr>
+        </p>
+        <p align="left" id=pcontent>
+            <tr>
+                <td>物价:</td>
+                <td>{{place.price}}
+                <td>&nbsp&nbsp景点门票:</td>
+                <td>{{place.spotticket}}</td>
+                <td>&nbsp&nbsp医疗:</td>
+                <td>{{place.hashospital}}</td>
+            </tr>
+        </p>
+        <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
+        <p align="center">
+            <tr>
+                <td><a href="{% url 'pages:editinfo_c' place.id %}">编辑</a></td>
+            </tr>
+        </p>
+    </div>
+{% endblock %}

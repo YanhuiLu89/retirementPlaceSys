@@ -37,10 +37,9 @@
 
 {% block topmenucenter %}
     <div style="padding:20px">
-        <a id =link_center href="{% url 'pages:home' %}">首页</a>
-        <a id =link_center href="{% url 'pages:mgspot' %}">景点管理</a> 
-        <a id =link_center  href="{% url 'pages:mguser' %}">个人会员管理</a> 
-		<a id =selectedlink_center href="{% url 'pages:mgplace' %}">养老机构管理</a> 
+        <a id =selectedlink_center href="{% url 'pages:home' %}">首页</a>
+        <a id =link_center href="{% url 'pages:mginfo_c' %}">信息管理</a> 
+        <a id =link_center href="{% url 'pages:mgorder_c' %}">订单管理</a> 
     </div>
 {% endblock %}
 
@@ -69,12 +68,12 @@
                 </tr>
             </p>
             <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
-            <p align="center">
+            <!-- <p align="center">
                 <tr>
                     <td><a href="{% url 'pages:editplace' place.id %}">编辑</a></td>
                     <td><a href="{% url 'pages:delplace' place.id %}">删除</a></td>  
                 </tr>
-            </p>
+            </p> -->
         {% endfor %}
     </div>
 {% endblock %}
