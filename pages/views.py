@@ -28,7 +28,7 @@ def index(request):#入口页
         user = Users(usertype=temp_usertype,name=temp_name, password=temp_psw, email=temp_mail)
         user.save()
         if 2==temp_usertype:#如果是养老机构会员，要创建对应的养老机构对象
-            place=Places(user=user,publishtime=timezone.now())
+            place=Places(user=user,name=user.name,publishtime=timezone.now())
             place.save()
         return render(request,'pages/login.html')
     return render(request,'pages/index.html')

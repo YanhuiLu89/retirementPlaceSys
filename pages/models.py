@@ -15,15 +15,18 @@ class Places(models.Model):
     phone=models.CharField(max_length=50,default='')#热线电话
     keywords = models.CharField(max_length=300,default='')
     introduce = models.TextField(max_length=2000,default='')
-    cost = models.IntegerField(default=3000)#费用
+    cost = models.IntegerField(default=0)#费用
     traffic = models.CharField(max_length=100,default=u'高铁')#交通方式,高铁，航空，港口，可多选
-    price = models.CharField(max_length=50,default=u'高')#物价，高，中，低  单选
+    price = models.CharField(max_length=50,default=u'中')#物价，高，中，低  单选
     spotticket=models.CharField(max_length=50,default=u'贵')#景点门票，贵，较贵，便宜，较便宜 单选
     hospital=models.CharField(max_length=50,default=u'有三甲医院') #有三甲医院，无三甲医院，单选
     address = models.CharField(max_length=300)
     singleroomcount= models.IntegerField(default=20)#单人间个数
+    singleroomfee= models.IntegerField(default=0)#单人间费用
     doubleroomcount= models.IntegerField(default=20)#双人间个数
+    doubleroomfee= models.IntegerField(default=0)#双人间费用
     familyroomcount= models.IntegerField(default=20)#家庭间个数
+    familyroomfee= models.IntegerField(default=0)#家庭间费用
     image = models.ImageField(upload_to='images',default='') 
     likedcount=models.IntegerField(default=0)#点赞个数
     publishtime = models.DateTimeField('date published')
