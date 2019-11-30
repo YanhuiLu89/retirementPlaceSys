@@ -28,6 +28,7 @@ urlpatterns = [
     path('retiregroup/', views.retiregroup, name='retiregroup'),
     path('toshareplace/<place_id>', views.toshareplace, name='toshareplace'),
     path('shareplace/<place_id>', views.shareplace, name='shareplace'),
+    path('likeplace/<place_id>', views.likeplace, name='likeplace'),
     path('localspot/<place_id>', views.localspot, name='localspot'),
     path('searchspot/', views.searchspot, name='searchspot'),
     path('mginfo_c/', views.mginfo_c, name='mginfo_c'),

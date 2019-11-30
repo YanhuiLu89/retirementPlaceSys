@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db.models import Q 
 
-from .models import Users,Places,Scenicspot,Shares,Order,Comment
+from .models import Users,Places,Scenicspot,Shares,Order,Comment,Like
 import time
 
 # Create your views here.
@@ -310,16 +310,23 @@ def searchplace(request):#搜索养老地
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
+    user = Users.objects.get(email = cook)
     if request.method == 'POST':
         if 'search' in request.POST:#搜索
             searchcontent=request.POST['search_content']
             place_list=Places.objects.filter(Q(name__contains=searchcontent) | Q(keywords__contains=searchcontent) \
                 | Q(introduce__contains=searchcontent)|Q(cost__contains=searchcontent)|Q(traffic__contains=searchcontent)\
-                |Q(price__contains=searchcontent)|Q(spotticket__contains=searchcontent)|Q(hospital__contains=searchcontent))\
+                |Q(price__contains=searchcontent)|Q(spotticket__contains=searchcontent)|Q(hospital__contains=searchcontent)\
+                |Q(phone__contains=searchcontent)|Q(address__contains=searchcontent))\
                 .order_by('-publishtime') #从各个字段中搜索要搜索的内容
             context = {'place_list': place_list}
             messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
-            return render(request, 'pages/homepage.html',context)
+            if user.usertype==0:
+                return  render(request,'pages/homepage.html',context )
+            elif user.usertype==1:
+                return  render(request,'pages/homepage_a.html',context )
+            elif user.usertype==2:
+                return render(request, 'pages/homepage_c.html',context )
         elif 'highsearch' in request.POST:#高级搜索
             place_list = Places.objects.all()
             context = {'place_list': place_list}
@@ -447,9 +454,29 @@ def shareplace(request,place_id):#分享到养老圈
             temp_image=''
         share=Shares(user=user,place=place,text=temp_text,image=temp_image,time=timezone.now())
         share.save()
+        place.sharedcount+=1
+        place.save()
         return HttpResponseRedirect(reverse('pages:retiregroup'))
     context={'place':place}
     return render(request, 'pages/share.html',context)
+
+def likeplace(request,place_id):#点赞某个养老机构
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    currentUser = Users.objects.get(email = cook)
+    temp_id=place_id
+    currentPlace=Places.objects.get(id=temp_id)
+    if Like.objects.filter(Q(user=currentUser) & Q(place=currentPlace)).exists():
+        Like.objects.filter(Q(user=currentUser) & Q(place=currentPlace)).delete()
+        currentPlace.likedcount-= 1
+    else:
+        like=Like(user=currentUser,place=currentPlace,time=timezone.now())
+        like.save()
+        currentPlace.likedcount+= 1
+    currentPlace.save()
+    return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新修改的内容
     
 #########################################养老机构相关接口#################################################################
 def mginfo_c(request):#养老机构信息管理地

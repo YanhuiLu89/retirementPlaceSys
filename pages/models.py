@@ -29,6 +29,7 @@ class Places(models.Model):
     familyroomfee= models.IntegerField(default=0)#家庭间费用
     image = models.ImageField(upload_to='images',default="upimg/default.jpg") 
     likedcount=models.IntegerField(default=0)#点赞个数
+    sharedcount=models.IntegerField(default=0)#被分享次数
     publishtime = models.DateTimeField('date published')
 
 class Scenicspot(models.Model):
@@ -60,4 +61,9 @@ class Comment(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 外键标志谁评论的
     place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 外键评论的那个养老机构
     text = models.CharField(max_length=500)#评论的内容
+    time = models.DateTimeField('date published')#评论时间
+
+class Like(models.Model):
+    user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 外键标志谁点赞的
+    place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 点赞的那个养老机构
     time = models.DateTimeField('date published')#评论时间

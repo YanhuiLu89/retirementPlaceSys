@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
 
 {% block head %}  
-<br>
+
 {% endblock %}
 
 {% block style %}
 <style>
+    #link{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:gray;          
+    }
+    #selectedlink{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:black;         
+    }
     #textcontent {
         width: 80%;
         height: auto;
@@ -13,6 +25,10 @@
         word-break:break-all;
         overflow: hidden;
         margin:5% auto
+    }
+    #pcontent{
+        font-size:28px;
+        color:darkslategrey
     }
 </style>
 {% endblock %}
@@ -39,31 +55,58 @@
         <div id=textcontent>
             {% for place in place_list.all %}
                 <h4>{{ place.name }}</h4>
+            <img src='{{ MEDIA_URL }}{{ place.image}}' alt=''/>
                 <p align="left" id=pcontent><lable>关键词:</label> {{ place.keywords}}</p>
                 <p align="left" id=pcontent><lable>简介:</label> {{ place.introduce}}</p>
+            <p align="left" id=pcontent>电话：{{place.phone}} </p>
+            <p align="left" id=pcontent>地址：{{place.address}}</p>
                 <p align="left" id=pcontent>
                     <tr>
-                        <td>花费(元/月):</td>
-                        <td>{{place.cost}}</td>
-                        <td>&nbsp&nbsp交通:</td>
-                        <td>{{ place.traffic}}</td>
+                    <td>平均费用：{{place.cost}}(元/月)</td>
+                    <td>&nbsp&nbsp交通:</td>
+                    <td></td>{{ place.traffic}}</td>
                     </tr>
                 </p>
                 <p align="left" id=pcontent>
                     <tr>
                         <td>物价:</td>
-                        <td>{{place.price}}
-                        <td>&nbsp&nbsp景点门票:</td>
-                        <td>{{place.spotticket}}</td>
-                        <td>&nbsp&nbsp医疗:</td>
-                        <td>{{place.hashospital}}</td>
+                    	<td>{{place.price}}</td>
+                    	<td>&nbsp&nbsp景点门票:</td>
+                    	<td>{{place.spotticket}}</td>
+                    	<td>&nbsp&nbsp医疗:</td>
+                    	<td>{{place.hospital}}</td>
                     </tr>
                 </p>
-                <p align="left" id=pcontent><lable id=''>发布时间:</lable> {{place.publishtime}}</p>
-                <p align="center">
-                    <a href="{% url 'pages:localspot' place.id %}">当地景点</a>
-                    <a href="{% url 'pages:toshareplace' place.id %}">分享</a>
-                </p>
+            <p align="left" id=pcontent>
+                <tr>
+                    <td>单人房：</td>
+                    <td>&nbsp&nbsp{{place.singleroomcount}}间</td>
+                    <td>&nbsp&nbsp{{place.singleroomfee}}元/天</td>
+                    <td>&nbsp&nbsp<a href="{% url 'pages:highsearch' %}">预定</a></td>
+                </tr>
+            </p>
+            <p align="left" id=pcontent>
+                <tr>
+                    <td>双人房：</td>
+                    <td>&nbsp&nbsp{{place.doubleroomcount}}间</td>
+                    <td>&nbsp&nbsp{{place.doubleroomfee}}元/天</td>
+                    <td>&nbsp&nbsp<a href="{% url 'pages:highsearch' %}">预定</a></td>
+                </tr>
+            </p>
+            <p align="left" id=pcontent>
+                <tr>
+                    <td>家庭房：</td>
+                    <td>&nbsp&nbsp{{place.familyroomcount}}间</td>
+                    <td>&nbsp&nbsp{{place.familyroomfee}}元/天</td>
+                    <td>&nbsp&nbsp<a href="{% url 'pages:highsearch' %}">预定</a></td>
+                </tr>
+            </p>
+            <p align="left" style="font-size:20px;color:grey">
+                <td></td><lable id=''>更新时间:</lable> {{place.publishtime}}</td>
+                <td>&nbsp&nbsp<a href="{% url 'pages:likeplace' place.id %}"><input type="submit" value='' style="background:url('/static/images/good1.png') no-repeat;width:36px; height:36px;"></lable></a>&nbsp&nbsp{{place.likedcount}}</td>
+                <td>&nbsp&nbsp<a href="{% url 'pages:localspot' place.id %}">当地景点</a></td>
+                <td>&nbsp&nbsp<a href="{% url 'pages:toshareplace' place.id %}">分享</a>&nbsp&nbsp{{place.sharedcount}}</td>
+            </p>
             {% endfor %}
         </div>
     </div>
