@@ -27,7 +27,7 @@ class Places(models.Model):
     doubleroomfee= models.IntegerField(default=0)#双人间费用
     familyroomcount= models.IntegerField(default=20)#家庭间个数
     familyroomfee= models.IntegerField(default=0)#家庭间费用
-    image = models.ImageField(upload_to='images',default='') 
+    image = models.ImageField(upload_to='images',default="upimg/default.jpg") 
     likedcount=models.IntegerField(default=0)#点赞个数
     publishtime = models.DateTimeField('date published')
 

@@ -24,7 +24,7 @@
 {% block topmenucenter %}
     <div style="padding:20px">
         <a id =link_center href="{% url 'pages:home' %}">首页</a>
-        <a id =selectedlink_center href="{% url 'pages:mginfo_c' %}">信息管理</a> 
+        <a id =selectedlink_center href="{% url 'pages:mginfo_c' %}">商家信息管理</a> 
         <a id =link_center href="{% url 'pages:mgorder_c' %}">订单管理</a> 
     </div>
 {% endblock %}
@@ -40,7 +40,7 @@
                     </tr>
                     <tr>
                         <td style="width:30%" align="right">电话：</td>
-                        <td style="width:70%" align="left"><input type="text" id="id_pthone" name="pthone"  value='{{place.phone}}' style="width:100%; height:60px" autofocus required  /></td>
+                        <td style="width:70%" align="left"><input type="text" id="id_pthone" name="phone"  value='{{place.phone}}' style="width:100%; height:60px" autofocus required  /></td>
                     </tr>
                         <td style="width:30%" align="right">关键词：</td>
                         <td style="width:70%"><input type="text" id="id_name" name="keywords"  value='{{place.keywords}}' style="width:100%; height:60px" autofocus required  /></td>
@@ -54,17 +54,21 @@
                         <td style="width:70%"  align="left"><textarea id="id_introduce"  name="introduce"   style="width:100%; height:300px">{{place.introduce}}</textarea></td>
                     </tr>
                     <tr>
-                        <td style="width:30%" align="right">图片：</td>
-                        <td style="width:70%" align="left"><input type="file" id="id_image" name="image" placeholder="上传图片" style="width:100%; height:32px"></td>
+                        <td tyle="width:30%" align="right">图片：</td>
+                        <td style="width:70%" align="left"><img src='{{ MEDIA_URL }}{{ place.image}}' alt=''/></td>
+                    </tr>
+                    <tr>
+                        <td style="width:30%" align="right">更改图片：</td>
+                        <td style="width:70%" align="left"><input type="file" id="id_image" name="image" value="{{place.image}}" placeholder="上传图片" style="width:100%; height:32px"></td>
                     </tr>
                     <tr>
                         <td tyle="width:30%" align="right">平均费用：</td>
-                        <td tyle="width:70%" align="left"><input type="number" id="id_name" name="cost"  value='{{place.cost}}' style="width:50%" />元/天</td>
+                        <td tyle="width:70%" align="left"><input type="number" id="id_cost" name="cost"  value='{{place.cost}}' style="width:50%" />元/天</td>
                     </tr>
                     <tr>
                         <td style="width:30%" align="right">交通：</td>
                         <td style="width:70%" align="left">
-                            <label><input name="traffic" type="checkbox" value="高铁" checked="checked" color=white/>高铁 </label> 
+                            <label><input name="traffic" type="checkbox" checked="checked" value="高铁" color=white/>高铁 </label> 
                             <label><input name="traffic" type="checkbox" value="航空" />航空 </label> 
                             <label><input name="traffic" type="checkbox" value="港口" />港口 </label> 
                         </td>

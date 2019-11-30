@@ -28,7 +28,7 @@ def index(request):#入口页
         user = Users(usertype=temp_usertype,name=temp_name, password=temp_psw, email=temp_mail)
         user.save()
         if 2==temp_usertype:#如果是养老机构会员，要创建对应的养老机构对象
-            place=Places(user=user,name=user.name,publishtime=timezone.now())
+            place=Places(user=user,name=user.name,publishtime=timezone.now(),)
             place.save()
         return render(request,'pages/login.html')
     return render(request,'pages/index.html')
@@ -87,6 +87,8 @@ def home(request):#去首页
         return render(request, 'pages/homepage.html',context)
     elif user.usertype == 1:
         return render(request, 'pages/homepage_a.html',context)
+    elif user.usertype == 2:
+        return render(request, 'pages/homepage_c.html',context)
 
 def myinfo(request):#我的界面
     cook = request.COOKIES.get('usermail')
@@ -99,6 +101,8 @@ def myinfo(request):#我的界面
         return render(request, 'pages/my.html',content)
     elif user.usertype==1:
         return render(request, 'pages/my_a.html',content)
+    elif user.usertype==2:
+        return render(request, 'pages/my_c.html',content)
 
 def editmyinfo(request):#我的界面
     cook = request.COOKIES.get('usermail')
@@ -116,7 +120,12 @@ def editmyinfo(request):#我的界面
         user.save()
         return HttpResponseRedirect(reverse('pages:myinfo'))
     content={'my':user}
-    return  render(request,'pages/editmyinfo.html',content)
+    if user.usertype==0:
+        return  render(request,'pages/editmyinfo.html',content)
+    elif user.usertype==1:
+        return  render(request,'pages/editmyinfo_a.html',content)
+    elif user.usertype==2:
+        return render(request, 'pages/editmyinfo_c.html',content)
 
 def placedetail(request,place_id):#我的界面
     cook = request.COOKIES.get('usermail')
@@ -462,6 +471,7 @@ def editinfo_c(request,place_id):#编辑信息
     place=Places.objects.get(id=temp_id)
     if request.method == 'POST':
         place.name = request.POST['name']
+        place.phone=request.POST['phone']
         place.keywords =request.POST['keywords']
         place.introduce = request.POST['introduce']
         place.cost= int(request.POST['cost'])
@@ -470,6 +480,15 @@ def editinfo_c(request,place_id):#编辑信息
         place.price= request.POST.get('price')
         place.spotticket= request.POST.get('spotticket')
         place.hospital= request.POST.get('hospital')
+        place.address = request.POST.get('address')
+        place.singleroomcount= request.POST.get('singleroomcount')
+        place.singleroomfee= request.POST.get('singleroomfee')
+        place.doubleroomcount= request.POST.get('doubleroomcount')
+        place.doubleroomfee= request.POST.get('doubleroomfee')
+        place.familyroomcount= request.POST.get('familyroomcount')
+        place.familyroomfee= request.POST.get('familyroomfee')
+        if 'image' in request.FILES:
+            place.image=request.FILES['image']
         place.publishtime=timezone.now()
         place.save()
         return HttpResponseRedirect(reverse('pages:mginfo_c'))#重定向到首页，显示新修改的内容
