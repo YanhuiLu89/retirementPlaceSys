@@ -477,7 +477,36 @@ def likeplace(request,place_id):#点赞某个养老机构
         currentPlace.likedcount+= 1
     currentPlace.save()
     return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新修改的内容
-    
+
+def makeorder(request,place_id,room_kind):#订单
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=place_id
+    currentPlace=Places.objects.get(id=temp_id)
+    currentUser = Users.objects.get(email = cook)
+    if request.method == 'POST':
+        temp_checkin = request.POST['checkin']
+        temp_checkout = request.POST['checkout']
+        temp_guestname=request.POST['guestname']
+        temp_phone=request.POST['phone']
+        temp_guestcount=request.POST['guestcount']
+        temp_roomcount=request.POST['roomcount']
+        order=Order(user=currentUser,place=currentPlace,roomkind=room_kind,roomcount=temp_roomcount,phone=temp_phone,guestname=temp_guestname,\
+                    guestcount= temp_guestcount,checkin=temp_checkin,chekcout=temp_checkout,fee=temp_fee)
+        temp_fee=0
+        if room_kind==0:
+            temp_fee=currentPlace.singleroomfee*temp_roomcount
+        elif room_kind==1:
+            temp_fee=currentPlace.doubleroomfee*temp_roomcount
+         elif room_kind==2:
+            temp_fee=currentPlace.familyroomfee*temp_roomcount
+        order.save()
+        return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新修改的内容
+    content={'place':place,'room_kind':room_kind}
+    return render(request,'pages/makeorder.html',content)
+
 #########################################养老机构相关接口#################################################################
 def mginfo_c(request):#养老机构信息管理地
     cook = request.COOKIES.get('usermail')

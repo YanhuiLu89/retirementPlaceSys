@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block head %}  
+
+{% endblock %}
+
+{% block style %}
+<style>
+    #link{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:gray;          
+    }
+    #selectedlink{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:black;         
+    }
+    #textcontent {
+        width: 80%;
+        height: auto;
+        word-wrap:break-word;
+        word-break:break-all;
+        overflow: hidden;
+        margin:5% auto
+    }
+    #pcontent{
+        font-size:28px;
+        color:darkslategrey
+    }
+</style>
+{% endblock %}
+{% block topmenucenter %}
+    <div style="padding:20px">
+        <a id =link_center href="{% url 'pages:home' %}">首页</a>
+		<a id =link_center href="{% url 'pages:highsearch' %}">高级筛选</a>
+        <a id =link_center  href="{% url 'pages:searchspot' %}">搜索景点</a> 
+		<a id =link_center  href="{% url 'pages:retiregroup' %}">养老圈</a> 
+    </div>
+{% endblock %}
+
+{% block contentbody %}
+    <h4>确认订单</h4>
+    <div style="width:100%;margin:5% auto">
+        <form enctype='multipart/form-data' action="{% url 'pages:makeorder' place.id%}" method="post" name='makeorder' >{% csrf_token %}
+            <table align="center" >
+                <tr>
+                    <td style="width:30%" align="right">养老机构：</td>
+                    <td style="width:70%" >{{place.name}}</td>
+                </tr>
+                <tr>
+                    <td style="width:30%" align="right">地址：</td>
+                    <td style="width:70%" >{{place.address}}</td>
+                </tr>
+                <tr>
+                    <td style="width:30%" align="right">机构电话：</td>
+                    <td style="width:70%" >{{place.phone}}</td>
+                </tr>
+                <tr>
+                    <td style="width:30%" align="right">入住日期：</td>
+                    <td style="width:70%" align="left"><input type="date" id="id_checkin" name="checkin"  value='' style="width:100%; height:60px" autofocus required  /></td>
+                </tr>
+                    <td style="width:30%" align="right">离开日期：</td>
+                    <td style="width:70%"><input type="date" id="id_checkout" name="checkout "  value='' style="width:100%; height:60px" /></td>
+                </tr>
+                <tr>
+                        <td style="width:30%" align="right">房间数：</td>
+                        <td style="width:70%"  align="left"><input type="number"  value='' id="id_roomcount"  name="oomcount" min=1 style="width:100%; height:300px"></td>
+                </tr>
+                <tr>
+                    <td style="width:30%" align="right">入住人姓名：</td>
+                    <td style="width:70%" align="left"><input type="text" id="id_guestname" name="guestname"  value='' style="width:50%" autofocus required/></td>
+                </tr>
+                <tr>
+                    <td style="width:30%" align="right">联系电话：</td>
+                    <td style="width:70%" align="left"><input type="text" id="id_phone" name="phone"  value='' style="width:50%" autofocus required/></td>
+                </tr>
+                <tr>
+                    <td style="width:30%" align="right">入住人数：</td>
+                    <td style="width:70%"  align="left"><input type="number"  value='' id="id_guestcount"  name="guestcount" min=1 style="width:100%; height:300px"></td>
+                </tr>
+                <tr>
+                    <td tyle="width:30%" align="right">费用：</td>
+                    <td style="width:70%"  align="left">500</td>
+                </tr>
+                <tr>
+                    <td style="width:30%" align="right"></td>
+                    <td tyle="width:70%"  align="left"><input type="submit" value="确认提交" style="width:120px; height:30px;float:right" ></td>
+                </tr>
+            </table>      
+        </form>
+    </div>
+{% endblock %}

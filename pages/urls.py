@@ -32,6 +32,7 @@ urlpatterns = [
     path('localspot/<place_id>', views.localspot, name='localspot'),
     path('searchspot/', views.searchspot, name='searchspot'),
     path('mginfo_c/', views.mginfo_c, name='mginfo_c'),
-     path('editinfo_c/<place_id>', views.editinfo_c, name='editinfo_c'),
+    path('editinfo_c/<place_id>', views.editinfo_c, name='editinfo_c'),
     path('magorder_c/', views.mgorder_c, name='mgorder_c'),
+    path('makeorder/<place_id,room_kind>', views.makeorder, name='makeorder'),
 ]

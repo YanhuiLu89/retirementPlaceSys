@@ -50,12 +50,14 @@ class Shares(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 主键标志下单者，一对一关系
     place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 下单到哪个养老机构，一对一
-    roomkind = models.CharField(max_length=100)#单人间，双人间，家庭间
-    price= models.IntegerField(default=500)#价格
+    roomkind= models.IntegerField(default=0)#房间类型 0-单人间，1-双人间，2-家庭间
+    roomcount= models.IntegerField(default=0)#房间个数
     guestname = models.TextField(max_length=50)#入住人名字
     phone=models.CharField(max_length=50,default='')#入住人电话
-    guestnamecount= models.IntegerField(default=1)#入住人数
-    checkintime = models.DateTimeField('date checkin')#入住时间
+    guestcount= models.IntegerField(default=1)#入住人数
+    checkintime = models.DateField(auto_now=False, auto_now_add=True)#入住时间
+    checkouttime = models.DateField(auto_now=False, auto_now_add=True)#离开时间
+    fee=models.IntegerField(default=0)#费用
 
 class Comment(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 外键标志谁评论的
