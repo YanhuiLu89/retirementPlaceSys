@@ -34,5 +34,5 @@ urlpatterns = [
     path('mginfo_c/', views.mginfo_c, name='mginfo_c'),
     path('editinfo_c/<place_id>', views.editinfo_c, name='editinfo_c'),
     path('magorder_c/', views.mgorder_c, name='mgorder_c'),
-    path('makeorder/<place_id,room_kind>', views.makeorder, name='makeorder'),
+    path('makeorder/<place_id><room_kind>', views.makeorder, name='makeorder'),
 ]

@@ -68,7 +68,7 @@
                     <tr>
                         <td style="width:30%" align="right">交通：</td>
                         <td style="width:70%" align="left">
-                            <label><input name="traffic" type="checkbox" checked="checked" value="高铁" color=white/>高铁 </label> 
+                            <label><input name="traffic" type="checkbox" value="高铁" color=white/>高铁 </label> 
                             <label><input name="traffic" type="checkbox" value="航空" />航空 </label> 
                             <label><input name="traffic" type="checkbox" value="港口" />港口 </label> 
                         </td>
@@ -76,7 +76,7 @@
                     <tr>
                         <td style="width:30%" align="right">物价：</td>
                         <td style="width:70%" align="left">
-                            <label><input name="price" type="radio"" checked="checked" value="高" />高 </label> 
+                            <label><input name="price" type="radio"" value="高" />高 </label> 
                             <label><input name="price" type="radio"" value="中" />中 </label> 
                             <label><input name="price" type="radio"" value="低" />低 </label> 
                         </td>
@@ -84,7 +84,7 @@
                     <tr>
                         <td style="width:30%" align="right">景点门票：</td>
                         <td style="width:70%" align="left">
-                            <label><input name="spotticket" type="radio"" checked="checked" value="贵" />贵 </label> 
+                            <label><input name="spotticket" type="radio"" value="贵" />贵 </label> 
                             <label><input name="spotticket" type="radio"" value="较贵" />较贵 </label> 
                             <label><input name="spotticket" type="radio"" value="便宜" />便宜 </label> 
                             <label><input name="spotticket" type="radio"" value="较便宜" />较便宜 </label> 
@@ -93,7 +93,7 @@
                     <tr>
                         <td style="width:30%" align="right">医疗：</td>
                         <td style="width:70%" align="left">
-                            <label><input name="hospital" type="radio"" checked="checked" value="有三甲医院" />有三甲医院 </label> 
+                            <label><input name="hospital" type="radio"" value="有三甲医院" />有三甲医院 </label> 
                             <label><input name="hospital" type="radio"" value="无三甲医院" />无三甲医院 </label> 
                         </td>
                     </tr>
@@ -141,4 +141,57 @@
             </table>      
         </form>
     </div>
+    <script>
+        // function trafficFunction() {
+        //     if(place.traffic.search("高铁")!=-1){
+        //         document.getElementById("traffic1").prop('checked', true);
+
+        //     }
+        //     if(place.traffic.search("航空")!=-1){
+        //         document.getElementById("traffic2").prop('checked', true);
+        //     }
+        //     if(place.traffic.search("港口")!=-1){
+        //         document.getElementById("traffic3").prop('checked', true);
+        //     }
+        // }
+        // function priceFunction() {
+        //     document.getElementById("price1").prop('checked', false);
+        //     document.getElementById("price2").prop('checked', false);
+        //     document.getElementById("price3").prop('checked', false);
+        //     if(place.price.search("高")!=-1){
+        //         document.getElementById("price1").prop('checked', true);
+
+        //     }
+        //     else if(place.price.search("中")!=-1){
+        //         document.getElementById("price2").prop('checked', true);
+        //     }
+        //     else if(place.price.search("低")!=-1){
+        //         document.getElementById("price3").prop('checked', true);
+        //     }
+        // }
+        // function spotticketFunction() {
+        //     if(place.spotticket.search("较贵")!=-1){
+        //         document.getElementById("spotticket2").prop('checked', true);
+
+        //     }
+        //     else if(place.spotticket.search("贵")!=-1){
+        //         document.getElementById("spotticket1").prop('checked', true);
+        //     }
+        //     else if(place.spotticket.search("较便宜")!=-1){
+        //         document.getElementById("spotticket4").prop('checked', true);
+        //     }
+        //     else if(place.spotticket.search("便宜")!=-1){
+        //         document.getElementById("spotticket3").prop('checked', true);
+        //     }
+        // }
+        // function hospitalFunction() {
+        //     if(place.hospital.search("有三甲医院")!=-1){
+        //         document.getElementById("hospital1").prop('checked', true);
+
+        //     }
+        //     else{
+        //         document.getElementById("hospital2").prop('checked', true);
+        //     }
+        // }
+    </script>
 {% endblock %}

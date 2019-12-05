@@ -500,11 +500,11 @@ def makeorder(request,place_id,room_kind):#订单
             temp_fee=currentPlace.singleroomfee*temp_roomcount
         elif room_kind==1:
             temp_fee=currentPlace.doubleroomfee*temp_roomcount
-         elif room_kind==2:
+        elif room_kind==2:
             temp_fee=currentPlace.familyroomfee*temp_roomcount
         order.save()
         return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新修改的内容
-    content={'place':place,'room_kind':room_kind}
+    content={'place_id':currentPlace.id,'room_kind':room_kind,'place':currentPlace}
     return render(request,'pages/makeorder.html',content)
 
 #########################################养老机构相关接口#################################################################
