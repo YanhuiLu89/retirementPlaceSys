@@ -71,7 +71,7 @@
                 </tr>
                 <tr>
                         <td style="width:30%" align="right">房间数：</td>
-                        <td style="width:70%"  align="left"><input type="number"  value=1 id="id_roomcount"  name="oomcount" min=1 style="width:100%"></td>
+                        <td style="width:70%"  align="left"><input type="number"  value=1 id="id_roomcount"  onchange="feeFunction()" name="roomcount" min=1 style="width:100%"></td>
                 </tr>
                 <tr>
                     <td style="width:30%" align="right">入住人姓名：</td>
@@ -115,7 +115,8 @@
                 document.getElementById('id_checkout').valueAsDate =  checkout;
             }
             document.getElementById("daycount").innerHTML=dayCount();
-            document.getElementById("fee").innerHTMLfeeFunction();
+            var fee =feeFunction();
+            document.getElementById("id_fee").innerHTML =fee;
         }
 
         function onCheckOutDate(){
@@ -128,7 +129,7 @@
                 document.getElementById('id_checkout').valueAsDate =  checkout;
             }
             document.getElementById("daycount").innerHTML=dayCount();
-            document.getElementById("fee").innerHTML=feeFunction();
+            feeFunction();
         }
 
         var daycount =dayCount();
@@ -140,20 +141,20 @@
             var timeDiff = Math.abs(checkout - checkin)
             return Math.ceil(timeDiff / (1000 * 3600 * 24));
         }
-        var fee =feeFunction();
-        document.getElementById("id_fee").innerHTML =fee;
+        feeFunction();
         
         function feeFunction() {
-            // return place.singleroomfee;
-            if(room_kind==="0"){
-                return place.singleroomfee*document.getElementById("id_roomcount")*dayCount();
+            var fee=0;
+            if({{room_kind}}===0){
+                fee={{place.singleroomfee}}*document.getElementById("id_roomcount").value*dayCount();
             }
-            if(room_kind===1){
-                return place.doubleroomfee*document.getElementById("id_roomcount")*dayCount();
+            else if({{room_kind}}===1){
+                fee={{place.doubleroomfee}}*document.getElementById("id_roomcount").value*dayCount();
             }
-            if(room_kind===2){
-                return place.familyroomfee*document.getElementById("id_roomcount")*dayCount();
+            else if({{room_kind}}===2){
+                fee={{place.familyroomfee}}*document.getElementById("id_roomcount").value*dayCount();
             }
+            document.getElementById("id_fee").innerHTML=fee;
         }
     </script>
 {% endblock %}

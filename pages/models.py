@@ -48,7 +48,7 @@ class Shares(models.Model):
     image = models.ImageField(upload_to='images',default='')
 
 class Order(models.Model):
-    user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 主键标志下单者，一对一关系
+    user = models.ForeignKey(Users,on_delete=models.CASCADE)#user
     place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 下单到哪个养老机构，一对一
     roomkind= models.IntegerField(default=0)#房间类型 0-单人间，1-双人间，2-家庭间
     roomcount= models.IntegerField(default=0)#房间个数
@@ -58,6 +58,8 @@ class Order(models.Model):
     checkintime = models.DateField(auto_now=False, auto_now_add=True)#入住时间
     checkouttime = models.DateField(auto_now=False, auto_now_add=True)#离开时间
     fee=models.IntegerField(default=0)#费用
+    state=models.IntegerField(default=0)#订单状态，0-待商家确认，1-已确认，2-已取消，3-已拒绝，4-已完成
+    time = models.DateTimeField('date published')#订单创建日期
 
 class Comment(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 外键标志谁评论的

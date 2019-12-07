@@ -32,7 +32,7 @@
 {% block contentbody %}
     <div style="margin: 0% 10% 0% 10%">
         <div style="width:100%; height:300px">
-            <h4>个人信息</h4>
+            <h4>我的->个人信息</h4>
             <table style="margin:0% 0% 0% 0%;width:100%">
                 <tr align="left">
                     <td width="50%">账户:{{ my.name }}</td>
@@ -47,5 +47,62 @@
                 <a  href="{% url 'pages:editmyinfo' %}">编辑</a>
             </p>
         </div>
-	</div>
+        <div style="margin: 0% 10% 0% 10%;width:100%; height:300px; color:darkslategrey;font-size:28px;">
+            <h4>我的->订单</h4>
+            {% for order in order_list.all %}
+            <table align="left" style="margin:0% 0% 0% 0%;width:100%" >
+                <tr>
+                    <td style="width:50%" align="left">养老机构：{{order.place.name}}</td>
+                    <td style="width:50%" align="left">电话：{{order.place.phone}}</td>
+                </tr>
+                <tr>
+                    <td style="width:50%" align="left">入住人姓名： order.guestname</td>
+                    <td style="width:50%"  align="left">电话：{{order.phone}}</td>
+                </tr>
+                <tr>
+                    <td style="width:50%" align="left">{{order.checkintime}}入住</td>
+                    <td style="width:50%" align="left">{{order.checkouttime}}离开</td>
+                </tr>
+                <tr>
+                    <td tyle="width:50%" align="left">费用：{{order.fee}}</td>
+                    <td style="width:50%"  align="left">订单状态：<label id="state"></label></td>
+                </tr>
+            </table>
+            <p align="left">
+                地址：{{order.place.address}}<br>
+                <labe align="left"  style="color:grey;font-size:20px;"> 订单创建时间：{{order.time}}</labe>
+                <button align="right" type="button" id="cancel" onclick="cancelorder()">取消</button><br>
+            </p>
+            <script>
+            orderstate();
+            function orderstate() {
+                alert("哈哈哈哈");
+                var ui =document.getElementById("cancel");
+                ui.style.display="visible";
+                alert("哈哈哈哈");
+                // if({{order.state}}==0){
+                //     document.getElementById("state").innerHTML="待商家确认";
+                //     ui.style.display="visible";
+                // }
+                // else if({{order.state}}==1){
+                //     document.getElementById("state").innerHTML="已确认";
+                // }
+                // else if({{order.state}}==2){
+                //     document.getElementById("state").innerHTML="已取消";
+                // }
+                // else if({{order.state}}==3){
+                //     document.getElementById("state").innerHTML="已拒绝";
+                // }
+                // else if({{order.state}}==4){
+                //     document.getElementById("state").innerHTML="已完成";
+                // }
+            }
+            function cancelorder() {
+                {{order.state}}=2;
+                alert("订单已取消");
+            }
+            </script>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

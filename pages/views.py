@@ -96,7 +96,8 @@ def myinfo(request):#我的界面
     if cook == None:
         return  render(request, 'pages/index.html')
     user = Users.objects.get(email = cook)
-    content={'my':user}
+    order_list=Order.objects.filter(user=user)
+    content={'my':user,'order_list':order_list}
     if user.usertype==0:
         return render(request, 'pages/my.html',content)
     elif user.usertype==1:
@@ -493,8 +494,6 @@ def makeorder(request,place_id,room_kind):#订单
         temp_phone=request.POST['phone']
         temp_guestcount=request.POST['guestcount']
         temp_roomcount=request.POST['roomcount']
-        order=Order(user=currentUser,place=currentPlace,roomkind=room_kind,roomcount=temp_roomcount,phone=temp_phone,guestname=temp_guestname,\
-                    guestcount= temp_guestcount,checkin=temp_checkin,chekcout=temp_checkout,fee=temp_fee)
         temp_fee=0
         if room_kind==0:
             temp_fee=currentPlace.singleroomfee*temp_roomcount
@@ -502,10 +501,25 @@ def makeorder(request,place_id,room_kind):#订单
             temp_fee=currentPlace.doubleroomfee*temp_roomcount
         elif room_kind==2:
             temp_fee=currentPlace.familyroomfee*temp_roomcount
+        order=Order(user=currentUser,place=currentPlace,roomkind=room_kind,roomcount=temp_roomcount,phone=temp_phone,guestname=temp_guestname,\
+                guestcount= temp_guestcount,checkintime=temp_checkin,checkouttime=temp_checkout,fee=temp_fee,time=timezone.now())
         order.save()
-        return HttpResponseRedirect(reverse('pages:home'))#重定向到首页，显示新修改的内容
+        messages.add_message(request,messages.INFO,'订单已提交，待商家确认')
+        return HttpResponseRedirect(reverse('pages:myinfo'))#重定向到我的页面
     content={'place_id':currentPlace.id,'room_kind':room_kind,'place':currentPlace}
     return render(request,'pages/makeorder.html',content)
+
+# def cancelorder(request,order_id):#订单
+#     cook = request.COOKIES.get('usermail')
+#     print('cook:', cook)
+#     if cook == None:
+#         return  render(request, 'pages/index.html')
+#     temp_id=place_id
+#     order=Order.Objects.get(id=order_id)
+#     order.state=2
+#     order.save()
+#     messages.add_message(request,messages.INFO,'订单已取消')
+#     return HttpResponseRedirect(reverse('pages:myinfo'))#重定向到我的页面
 
 #########################################养老机构相关接口#################################################################
 def mginfo_c(request):#养老机构信息管理地
