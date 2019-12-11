@@ -96,7 +96,7 @@ def myinfo(request):#我的界面
     if cook == None:
         return  render(request, 'pages/index.html')
     user = Users.objects.get(email = cook)
-    order_list=Order.objects.filter(user=user)
+    order_list=Order.objects.filter(user=user).order_by('-time')
     content={'my':user,'order_list':order_list}
     if user.usertype==0:
         return render(request, 'pages/my.html',content)
@@ -510,12 +510,13 @@ def makeorder(request,place_id,room_kind):#订单
     return render(request,'pages/makeorder.html',content)
 
 # def cancelorder(request,order_id):#订单
+#     print("cancelorder11111111111111111111111111")
 #     cook = request.COOKIES.get('usermail')
 #     print('cook:', cook)
 #     if cook == None:
 #         return  render(request, 'pages/index.html')
-#     temp_id=place_id
-#     order=Order.Objects.get(id=order_id)
+#     temp_id=order_id
+#     order=Order.Objects.get(id=temp_id)
 #     order.state=2
 #     order.save()
 #     messages.add_message(request,messages.INFO,'订单已取消')

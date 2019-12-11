@@ -65,66 +65,43 @@
                 </tr>
                 <tr>
                     <td tyle="width:50%" align="left">费用：{{order.fee}}</td>
-                    <td style="width:50%"  align="left">订单状态：<label id= "state"></label></td>
+                    <td style="width:50%"  align="left">订单状态：<label id= "state{{order.state}}"></label></td>
                 </tr>
             </table>
             <p align="left">
                 地址：{{order.place.address}}<br>
-                <labe align="left"  style="color:grey;font-size:20px;"> 订单创建时间：{{order.time}}</labe>
+                <b align="left"  style="color:grey;font-size:20px;"> 订单创建时间：{{order.time}}</b>
                 <button align="right" type="button" id= "cancel" onclick=cancelorder()">取消</button><br>
             </p>
-            <!-- <script>
-                orderstate({{order.id}});
-            </script> -->
             {% endfor %}
         </div>
         <script>
-            // function orderstate(id) {
-            //      alert(id);
-            //     var key="state"+id;
-            //     document.getElementById(key).innerHTML="已完成";
-            //     var ui =document.getElementById(key);
-            //     ui.style.display="none";
-            //     //alert("哈哈哈哈");
-            //     // if({{order.state}}==0){
-            //     //     document.getElementById("state").innerHTML="待商家确认";
-            //     //     ui.style.display="visible";
-            //     // }
-            //     // else if({{order.state}}==1){
-            //     //     document.getElementById("state").innerHTML="已确认";
-            //     // }
-            //     // else if({{order.state}}==2){
-            //     //     document.getElementById("state").innerHTML="已取消";
-            //     // }
-            //     // else if({{order.state}}==3){
-            //     //     document.getElementById("state").innerHTML="已拒绝";
-            //     // }
-            //     // else if({{order.state}}==4){
-            //     //     document.getElementById("state").innerHTML="已完成";
-            //     // }
-            // }
             window.onload=function(){
             var cancelBtns = document.getElementsByTagName('button');
             var stateLabels = document.getElementsByTagName('label');
                 for( var i=0; i<cancelBtns.length; i++){
                     var btn = cancelBtns[i];
-                    btn.style.display="none";
                     var state=stateLabels[i];
-                    state.innerText="已提交待商家确认";
-                //     order={{order_list}}[i];
-                //     if(order.state==0)
-                //     {
-                //         state.innerText="已提交待商家确认";
-                //         btn.style.display="display";
-                //     }
-                //     else if(order.state==1)
-                //         state.innerText="已确认";
-                //     else if(order.state==2)
-                //         state.innerText="已取消";
-                //     else if(order.state==3)
-                //         state.innerText="已拒绝";
-                //         else if(order.state==4)
-                //         state.innerText="已完成";
+                    if(state.id=="state0"){
+                        state.innerText="已提交待商家确认";
+                        btn.style.display="display";
+                    }
+                    else if(state.id=="state0"){
+                        state.innerText="已确认";
+                        btn.style.display="none";
+                    }
+                    else if(order.state==2){
+                        state.innerText="已取消";
+                        btn.style.display="none";
+                    }
+                    else if(order.state==3){
+                        state.innerText="已拒绝";
+                        btn.style.display="none";
+                    }
+                    else if(order.state==4){
+                        state.innerText="已完成";
+                        btn.style.display="none";
+                    }
                  }
             }
             </script>
