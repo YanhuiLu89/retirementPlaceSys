@@ -56,7 +56,7 @@
                     <td style="width:50%" align="left">电话：{{order.place.phone}}</td>
                 </tr>
                 <tr>
-                    <td style="width:50%" align="left">入住人姓名： order.guestname</td>
+                    <td style="width:50%" align="left">入住人姓名：{{order.guestname}}</td>
                     <td style="width:50%"  align="left">电话：{{order.phone}}</td>
                 </tr>
                 <tr>
@@ -65,40 +65,40 @@
                 </tr>
                 <tr>
                     <td tyle="width:50%" align="left">费用：{{order.fee}}</td>
-                    <td style="width:50%"  align="left">订单状态：<label id= "state{{order.state}}"></label></td>
+                    <td style="width:50%"  align="left">订单状态：<label name="state" id= "state{{order.state}}"></label></td>
                 </tr>
             </table>
             <p align="left">
                 地址：{{order.place.address}}<br>
                 <b align="left"  style="color:grey;font-size:20px;"> 订单创建时间：{{order.time}}</b>
-                <button align="right" type="button" id= "cancel" onclick=cancelorder()">取消</button><br>
+                <a align="right"  name="cancel" href="{% url 'pages:cancelorder' order.id %}">取消</a><br>
             </p>
             {% endfor %}
         </div>
         <script>
             window.onload=function(){
-            var cancelBtns = document.getElementsByTagName('button');
-            var stateLabels = document.getElementsByTagName('label');
-                for( var i=0; i<cancelBtns.length; i++){
-                    var btn = cancelBtns[i];
-                    var state=stateLabels[i];
-                    if(state.id=="state0"){
+            var cancels = document.getElementsByName('cancel');
+            var states = document.getElementsByName('state');
+                for( var i=0; i<cancels.length; i++){
+                    var btn = cancels[i];
+                    var state=states[i];
+                    if(state.id.indexOf("0")!=-1){
                         state.innerText="已提交待商家确认";
                         btn.style.display="display";
                     }
-                    else if(state.id=="state0"){
+                    else if(state.id.indexOf("1")!=-1){
                         state.innerText="已确认";
                         btn.style.display="none";
                     }
-                    else if(order.state==2){
+                    else if(state.id.indexOf("2")!=-1){
                         state.innerText="已取消";
                         btn.style.display="none";
                     }
-                    else if(order.state==3){
+                    else if(state.id.indexOf("3")!=-1){
                         state.innerText="已拒绝";
                         btn.style.display="none";
                     }
-                    else if(order.state==4){
+                    else if(state.id.indexOf("4")!=-1){
                         state.innerText="已完成";
                         btn.style.display="none";
                     }

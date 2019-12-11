@@ -509,18 +509,18 @@ def makeorder(request,place_id,room_kind):#订单
     content={'place_id':currentPlace.id,'room_kind':room_kind,'place':currentPlace}
     return render(request,'pages/makeorder.html',content)
 
-# def cancelorder(request,order_id):#订单
-#     print("cancelorder11111111111111111111111111")
-#     cook = request.COOKIES.get('usermail')
-#     print('cook:', cook)
-#     if cook == None:
-#         return  render(request, 'pages/index.html')
-#     temp_id=order_id
-#     order=Order.Objects.get(id=temp_id)
-#     order.state=2
-#     order.save()
-#     messages.add_message(request,messages.INFO,'订单已取消')
-#     return HttpResponseRedirect(reverse('pages:myinfo'))#重定向到我的页面
+def cancelorder(request,order_id):#订单
+    print("order_id="+order_id)
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=order_id
+    order=Order.objects.get(id=temp_id)
+    order.state=2
+    order.save()
+    messages.add_message(request,messages.INFO,'订单已取消')
+    return HttpResponseRedirect(reverse('pages:myinfo'))#重定向到我的页面
 
 #########################################养老机构相关接口#################################################################
 def mginfo_c(request):#养老机构信息管理地
