@@ -36,4 +36,7 @@ urlpatterns = [
     path('magorder_c/', views.mgorder_c, name='mgorder_c'),
     path('makeorder/<place_id><room_kind>', views.makeorder, name='makeorder'),
     path('cancelorder/<order_id>', views.cancelorder, name='cancelorder'),
+    path('confirmorder/<order_id>', views.confirmorder, name='confirmorder'),
+    path('refuseorder/<order_id>', views.refuseorder, name='refuseorder'),
+    path('finishorder/<order_id>', views.finishorder, name='finishorder'),
 ]

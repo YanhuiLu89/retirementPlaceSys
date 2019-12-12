@@ -96,8 +96,15 @@ def myinfo(request):#我的界面
     if cook == None:
         return  render(request, 'pages/index.html')
     user = Users.objects.get(email = cook)
-    order_list=Order.objects.filter(user=user).order_by('-time')
-    content={'my':user,'order_list':order_list}
+    if user.usertype==0:
+        order_list=Order.objects.filter(user=user).order_by('-time')
+        content={'my':user,'order_list':order_list}
+    elif user.usertype==1:
+        content={'my':user}
+    if user.usertype==2:
+        place=Places.objects.get(user=user)
+        order_list=Order.objects.filter(place=place).order_by('-time')
+        content={'my':user,'order_list':order_list}
     if user.usertype==0:
         return render(request, 'pages/my.html',content)
     elif user.usertype==1:
@@ -331,7 +338,7 @@ def searchplace(request):#搜索养老地
         elif 'highsearch' in request.POST:#高级搜索
             place_list = Places.objects.all()
             context = {'place_list': place_list}
-            return render(request, 'pages/highsearch.html',context)
+            return HttpResponseRedirect(reverse('pages:highsearch'))
     return render(request, 'pages/homepage.html')
 
 def highsearch(request):#高级筛选养老地
@@ -339,8 +346,9 @@ def highsearch(request):#高级筛选养老地
     if cook == None:
         return  render(request, 'pages/index.html')
     print('post:', request.POST)
+    user = Users.objects.get(email = cook)
     filter_count=0
-    place_list=Places.objects.all()
+    place_list=Places.objects.all().order_by('-publishtime')
     if request.method == 'POST':
         temp_keyword=request.POST['keywords']
         if temp_keyword!=None and temp_keyword!='':
@@ -377,15 +385,25 @@ def highsearch(request):#高级筛选养老地
         if filter_count==0:
             messages.add_message(request,messages.ERROR,'至少要有一个筛选条件')
             context = {'place_list': contex}
-            return render(request, 'pages/highsearch.html',context)
+            if user.usertype == 0:
+                return render(request, 'pages/highsearch.html',context)
+            elif user.usertype == 2:
+                return render(request, 'pages/highsearch_c.html',context)
         if len(place_list)==0:
             messages.add_message(request,messages.ERROR,'没有符合条件的搜索结果')
         else:
             messages.add_message(request,messages.INFO,'共'+str(len(place_list))+'条结果')
             place_lsit=place_list.order_by('-publishtime')
             context = {'place_list': place_list}
-            return render(request, 'pages/highsearch.html',context)
-    return render(request, 'pages/highsearch.html')
+            if user.usertype == 0:
+                return render(request, 'pages/highsearch.html',context)
+            elif user.usertype == 2:
+                return render(request, 'pages/highsearch_c.html',context)
+    context = {'place_list': place_list}
+    if user.usertype == 0:
+        return render(request, 'pages/highsearch.html',context)
+    elif user.usertype == 2:
+        return render(request, 'pages/highsearch_c.html',context)
 
 def localspot(request,place_id):#当地景点
     cook = request.COOKIES.get('usermail')
@@ -404,6 +422,7 @@ def searchspot(request):#景点搜索页面，按关键字搜索
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
+    user = Users.objects.get(email = cook)
     if request.method == 'POST':
         searchcontent=request.POST['search_content']
         spot_list=Scenicspot.objects.filter(Q(name__contains=searchcontent) | Q(introduce__contains=searchcontent)|Q(address__contains=searchcontent)) #从名称、简介、地址字段中搜索要搜索的内容
@@ -412,11 +431,17 @@ def searchspot(request):#景点搜索页面，按关键字搜索
         else:
             messages.add_message(request,messages.INFO,'共'+str(len( spot_list))+'条结果')
             content={'spot_list':spot_list}
-            return render(request,'pages/searchspot.html',content)
+            if user.usertype == 0:
+                return render(request,'pages/searchspot.html',content)
+            elif user.usertype == 2:
+                return render(request,'pages/searchspot_c.html',content)
 
     spot_list=Scenicspot.objects.all()
     content={'spot_list':spot_list}
-    return render(request,'pages/searchspot.html',content)
+    if user.usertype == 0:
+        return render(request,'pages/searchspot.html',content)
+    elif user.usertype == 2:
+        return render(request,'pages/searchspot_c.html',content)
     
 
 def retiregroup(request):#养老圈
@@ -424,9 +449,13 @@ def retiregroup(request):#养老圈
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
+    user = Users.objects.get(email = cook)
     sharelist=Shares.objects.all().order_by('-time')
-    context={'share_list':sharelist}
-    return render(request, 'pages/retiregroup.html',context)
+    content={'share_list':sharelist}
+    if user.usertype == 0:
+        return render(request,'pages/retiregroup.html',content)
+    elif user.usertype == 2:
+        return render(request,'pages/retiregroup_c.html',content)
 
 def toshareplace(request,place_id):#分享到养老圈
     cook = request.COOKIES.get('usermail')
@@ -574,3 +603,42 @@ def mgorder_c(request):#管理订单
     place_list = Places.objects.all().order_by('-publishtime')
     context = {'place_list': place_list}
     return render(request, 'pages/mgplace.html',context)#跳到地点管理界面
+
+def confirmorder(request,order_id):#订单
+    print("order_id="+order_id)
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=order_id
+    order=Order.objects.get(id=temp_id)
+    order.state=1
+    order.save()
+    messages.add_message(request,messages.INFO,'订单已确认')
+    return HttpResponseRedirect(reverse('pages:myinfo'))#重定向到我的页面
+ 
+def refuseorder(request,order_id):#订单
+    print("order_id="+order_id)
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=order_id
+    order=Order.objects.get(id=temp_id)
+    order.state=3
+    order.save()
+    messages.add_message(request,messages.INFO,'订单已拒绝')
+    return HttpResponseRedirect(reverse('pages:myinfo'))#重定向到我的页面
+
+def finishorder(request,order_id):#订单
+    print("order_id="+order_id)
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=order_id
+    order=Order.objects.get(id=temp_id)
+    order.state=4
+    order.save()
+    messages.add_message(request,messages.INFO,'订单已完成')
+    return HttpResponseRedirect(reverse('pages:myinfo'))#重定向到我的页面
