@@ -33,13 +33,13 @@ class Places(models.Model):
     publishtime = models.DateTimeField('date published')
 
 class Scenicspot(models.Model):
-    place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 是外键标志景点在哪个城市,多对一关系
     name = models.CharField(max_length=100)
     introduce = models.TextField(max_length=2000)
     address = models.CharField(max_length=300)
     image = models.ImageField(upload_to='images')
     opentime = models.CharField(max_length=100)
-
+    nearbyplace=models.ManyToManyField(Places)
+    
 class Shares(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE)#user 外键标志谁分享的
     place = models.ForeignKey(Places,on_delete=models.CASCADE)#place 外键,分享的是哪个地点

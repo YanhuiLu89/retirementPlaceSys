@@ -235,7 +235,6 @@ def addspot(request):#添加景点页面
     content={'place_list':place_list}
     if request.method == 'POST':
         temp_name = request.POST['name']
-        temp_place=Places.objects.get(name=request.POST['placename'])
         temp_address =request.POST['address']
         temp_opentime =request.POST['time']
         temp_introduce = request.POST['introduce']
@@ -247,8 +246,12 @@ def addspot(request):#添加景点页面
             messages.add_message(request,messages.ERROR,'该景点已经存在')
             return render(request, 'pages/admin_addspot.html',content)
         else:
-            scenicspot=Scenicspot(place=temp_place,name=temp_name,introduce=temp_introduce,\
+            scenicspot=Scenicspot(name=temp_name,introduce=temp_introduce,\
                 address=temp_address,opentime=temp_opentime,image=temp_image)
+            placename_list = request.POST.getlist('placename') 
+            for placename in placename_list:
+                placen=Places.objects.get(name=placename)
+                scenicspot.nearbyplace.add(place)
             scenicspot.save()
             return HttpResponseRedirect(reverse('pages:mgspot'))
         return render(request, 'pages/admin_addplace.html')

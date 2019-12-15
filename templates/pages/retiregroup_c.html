@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block head %}  
+<br/>
+{% endblock %}
+
+{% block style %}
+<style>
+    #link{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:gray;          
+    }
+    #selectedlink{
+        font-size:20px;
+        padding: 6px;
+        text-decoration:none;
+        color:black;         
+    }
+    #textcontent {
+        width: 80%;
+        height: auto;
+        word-wrap:break-word;
+        word-break:break-all;
+        overflow: hidden;
+        margin:5% auto;
+        font-size: 20px
+    }
+</style>
+{% endblock %}
+{% block topmenucenter %}
+    <div style="padding:20px">
+        <a id =link_center href="{% url 'pages:home' %}">首页</a>
+		<a id =link_center href="{% url 'pages:highsearch' %}">高级筛选</a>
+        <a id =link_center  href="{% url 'pages:searchspot' %}">搜索景点</a> 
+		<a id =selectedlink_center  href="{% url 'pages:retiregroup' %}">养老圈</a> 
+ 	 	<a id =link_center href="{% url 'pages:mginfo_c' %}">商家信息管理</a> 
+    </div>
+{% endblock %}
+
+{% block contentbody %}
+    <div style="margin: 5% 5%;">
+        <div id=textcontent>
+            {% for share in share_list.all %}
+            <table>
+                <td width="20%">
+                    {{share.user.name}}
+                </td>
+                <td width="80%">
+                    <p align="left" id=pcontent>{{share.text}}</p>
+                    <img width='100%' src='{{ MEDIA_URL }}{{ share.image}}' alt=''/>
+                    <p align="left" width="90%" height="30px" text-overflow="ellipsis"><a  href="{% url 'pages:placedetail' share.place.id  %}">{{share.place.name}}&nbsp&nbsp{{share.place.introduce}}</a></p>
+                    <p align="left" font-size="20px">{{share.time}}</p>
+                </td>
+            </table>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
