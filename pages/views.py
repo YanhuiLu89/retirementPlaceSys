@@ -248,11 +248,11 @@ def addspot(request):#添加景点页面
         else:
             scenicspot=Scenicspot(name=temp_name,introduce=temp_introduce,\
                 address=temp_address,opentime=temp_opentime,image=temp_image)
+            scenicspot.save()
             placename_list = request.POST.getlist('placename') 
             for placename in placename_list:
-                placen=Places.objects.get(name=placename)
+                place=Places.objects.get(name=placename)
                 scenicspot.nearbyplace.add(place)
-            scenicspot.save()
             return HttpResponseRedirect(reverse('pages:mgspot'))
         return render(request, 'pages/admin_addplace.html')
     print('addspot1:' ,addspot)
@@ -415,7 +415,7 @@ def localspot(request,place_id):#当地景点
         return  render(request, 'pages/index.html')
     temp_id=place_id
     place=Places.objects.get(id=temp_id)
-    spotlist=Scenicspot.objects.filter(place=place)
+    spotlist=place.scenicspot_set.all()
     count=len(spotlist)
     content={'count':count,'spot_list':spotlist}
     return render(request,'pages/spotlist.html',content)
@@ -439,7 +439,7 @@ def searchspot(request):#景点搜索页面，按关键字搜索
             elif user.usertype == 2:
                 return render(request,'pages/searchspot_c.html',content)
 
-    spot_list=Scenicspot.objects.all()
+    spot_list=Scenicspot.objects.all().order_by('-id')
     content={'spot_list':spot_list}
     if user.usertype == 0:
         return render(request,'pages/searchspot.html',content)

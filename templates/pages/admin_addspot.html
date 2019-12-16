@@ -38,10 +38,10 @@
                  <td><input type="text" id="id_name" name="name" placeholder="请输入名称" style="width:100%; height:60px" autofocus required  /></td>
              </tr>
              <tr>
-                <td style="width:10%">所属养老地</td>
+                <td style="width:10%">附近养老机构<label font-size="10px">(按住ctrl键,再点击可多选哟)</label></td>
                 <td style="width: 50%;height:60px">
-                <select name="placename" panelHeight="auto" style="width: 100%;height:30px;float:left">
-                {% for place in place_list.all %}
+                <select name="placename"  class="selectpicker form-control" multiple data-max-options="10" style="width: 50%;float:left">
+                    {% for place in place_list.all %}
                     <option value='{{place.name}}'>{{place.name}}</option>
                 {% endfor %}
                 </select> 

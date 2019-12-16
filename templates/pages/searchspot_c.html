@@ -41,11 +41,10 @@
                 <h4>{{ spot.name }}</h4>
                 <img src='{{ MEDIA_URL }}{{ spot.image}}' alt=''/>
                 <p align="left" ><lable>简介:</label> {{ spot.introduce}}</p>
-                <p align="left" id=pcontent>
-                    <lable>附近养老机构:</label> 
-                        {% for spot in place.nearbyspots.all %}
-                        <a  href="{% url 'pages:placedetail' spot.place.id %}">{{ spot.place.name}}</a>
-                        {% endfor %}
+                <p align="left" id=pcontent><lable>附近养老机构:</label>
+                    {% for place in spot.nearbyplace.all %}
+                    &nbsp&nbsp<a  href="{% url 'pages:placedetail' place.id %}">{{ place.name}}</a>
+                    {% endfor %}
                 </p>
                 <p align="left" id=pcontent><lable>详细地址:</label> {{ spot.address}}</p>
                 <p align="left" id=pcontent><lable>开放时间:</label> {{ spot.opentime}}</p>
