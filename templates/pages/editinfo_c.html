@@ -104,7 +104,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:30%">附近景点<label font-size="10px">(按住ctrl键,再点击可多选哟)</label></td>
+                        <td style="width:30%">附近景点:<label font-size="5px">(按住ctrl键,再点击可多选哟)</label></td>
                         <td style="width: 70%;height:60px">
                             <select name="spotname"  class="selectpicker form-control" multiple data-max-options="10" style="width: 50%;float:left">
                                 {% for spot in spot_list.all %}
@@ -112,6 +112,10 @@
                             {% endfor %}
                             </select> 
                         </td>
+                    </tr>
+                    <tr>
+                        <td align="right">没找到合适景点</td>
+                        <td align="left"><option><a href="{% url 'pages:addspot' %}">自助添加景点</a></option></td>
                     </tr>
                     <tr>
                         <td style="width:30%" align="right">医疗：</td>
