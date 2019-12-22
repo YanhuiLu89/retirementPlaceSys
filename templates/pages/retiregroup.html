@@ -48,7 +48,7 @@
                 </td>
                 <td width="80%">
                     <p align="left" id=pcontent>{{share.text}}</p>
-                    <img width='100%' src='{{ MEDIA_URL }}{{ share.image}}' alt=''/>
+                    <img width='100%' src='{{ MEDIA_URL }}{{ share.image}}' width="800" height="600" alt=''/>
                     <p align="left" width="90%" height="30px" text-overflow="ellipsis"><a  href="{% url 'pages:placedetail' share.place.id  %}">{{share.place.name}}&nbsp&nbsp{{share.place.introduce}}</a></p>
                     <p align="left" font-size="20px">{{share.time}}</p>
                 </td>

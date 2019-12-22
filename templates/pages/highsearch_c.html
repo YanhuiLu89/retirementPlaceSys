@@ -91,7 +91,7 @@
         <div id=textcontent>
             {% for place in place_list.all %}
                 <h4>{{ place.name }}</h4>
-            <img src='{{ MEDIA_URL }}{{ place.image}}' alt=''/>
+            <img src='{{ MEDIA_URL }}{{ place.image}}' width="800" height="600" alt=''/>
                 <p align="left" id=pcontent><lable>关键词:</label> {{ place.keywords}}</p>
                 <p align="left" id=pcontent><lable>简介:</label> {{ place.introduce}}</p>
             <p align="left" id=pcontent>电话：{{place.phone}} </p>
@@ -115,10 +115,19 @@
                 </p>
             <p align="left" id=pcontent>
                 <tr>
+                        <td >附近景点：</td>
+                        <td>
+                            {% for spot in place.scenicspot_set.all %}
+                            &nbsp&nbsp<a  href="{% url 'pages:spotdetail' spot.id %}">{{ spot.name}}</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </p>
+            <p align="left" id=pcontent>
+                <tr>
                     <td>单人房：</td>
                     <td>&nbsp&nbsp{{place.singleroomcount}}间</td>
                     <td>&nbsp&nbsp{{place.singleroomfee}}元/天</td>
-                    <td>&nbsp&nbsp<a href="{% url 'pages:makeorder' place.id 0 %}">预定</a></td>
                 </tr>
             </p>
             <p align="left" id=pcontent>
@@ -126,7 +135,6 @@
                     <td>双人房：</td>
                     <td>&nbsp&nbsp{{place.doubleroomcount}}间</td>
                     <td>&nbsp&nbsp{{place.doubleroomfee}}元/天</td>
-                    <td>&nbsp&nbsp<a href="{% url 'pages:makeorder' place.id 1 %}">预定</a></td>
                 </tr>
             </p>
             <p align="left" id=pcontent>
@@ -134,14 +142,11 @@
                     <td>家庭房：</td>
                     <td>&nbsp&nbsp{{place.familyroomcount}}间</td>
                     <td>&nbsp&nbsp{{place.familyroomfee}}元/天</td>
-                    <td>&nbsp&nbsp<a href="{% url 'pages:makeorder' place.id 2 %}">预定</a></td>
                 </tr>
             </p>
             <p align="left" style="font-size:20px;color:grey">
                 <td></td><lable id=''>更新时间:</lable> {{place.publishtime}}</td>
                 <td>&nbsp&nbsp<a href="{% url 'pages:likeplace' place.id %}"><input type="submit" id =good value='' style="background:url('/static/images/good.png') no-repeat;width:36px; height:36px;"></lable></a>&nbsp&nbsp{{place.likedcount}}</td>
-                <td>&nbsp&nbsp<a href="{% url 'pages:localspot' place.id %}">当地景点</a></td>
-                <td>&nbsp&nbsp<a href="{% url 'pages:toshareplace' place.id %}">分享</a>&nbsp&nbsp{{place.sharedcount}}</td>
             </p>
             {% endfor %}
         </div>

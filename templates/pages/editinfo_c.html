@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block contentbody %}
-    <h4>信息管理->信息编辑</h4>
+    <h4>商家信息管理->信息编辑</h4>
     <div style="width:100%;margin:5% auto">
         <form enctype='multipart/form-data' action="{% url 'pages:editinfo_c' place.id%}" method="post" name='editinfo_c' >{% csrf_token %}
             <table align="center" >

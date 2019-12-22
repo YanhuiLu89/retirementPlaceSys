@@ -39,7 +39,7 @@
         <div id=textcontent>
              {% for spot in spot_list.all %}
                 <h4>{{ spot.name }}</h4>
-                <img src='{{ MEDIA_URL }}{{ spot.image}}' alt=''/>
+                <img src='{{ MEDIA_URL }}{{ spot.image}}' width="800" height="600" alt=''/>
                 <p align="left" ><lable>简介:</label> {{ spot.introduce}}</p>
                 <p align="left" id=pcontent><lable>附近养老机构:</label>
                     {% for place in spot.nearbyplace.all %}

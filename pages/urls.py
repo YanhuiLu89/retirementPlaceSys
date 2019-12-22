@@ -18,6 +18,7 @@ urlpatterns = [
     path('delplace/<place_id>', views.delplace, name='delplace'),
     path('editplace/<place_id>', views.editplace, name='editplace'),
     path('placedetail/<place_id>', views.placedetail, name='placedetail'),
+    path('spotdetail/<spot_id>', views.spotdetail, name='spotdetail'),
     path('mguser/', views.mguser, name='mguser'),
     path('deluser/<user_id>', views.deluser, name='deluser'),
     path('myinfo/', views.myinfo, name='myinfo'),

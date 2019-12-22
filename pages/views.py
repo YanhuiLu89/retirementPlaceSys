@@ -143,8 +143,30 @@ def placedetail(request,place_id):#我的界面
     temp_id=place_id
     place=Places.objects.get(id=temp_id)
     context={'place':place}
-    return  render(request,'pages/placedetail.html',context)
+    user = Users.objects.get(email = cook)
+    if user.usertype==0:
+        return  render(request,'pages/placedetail.html',context)
+    elif user.usertype==1:
+        return  render(request,'pages/placedetail_a.html',context)
+    elif user.usertype==2:
+        return  render(request,'pages/placedetail_c.html',context)
 
+def spotdetail(request,spot_id):
+    cook = request.COOKIES.get('usermail')
+    print('cook:', cook)
+    if cook == None:
+        return  render(request, 'pages/index.html')
+    temp_id=spot_id
+    spot=Scenicspot.objects.get(id=temp_id)
+    content={'spot':spot}
+    user = Users.objects.get(email = cook)
+    if user.usertype==0:
+        return  render(request,'pages/spotdetail.html',content)
+    elif user.usertype==1:
+        return  render(request,'pages/spotdetail_a.html',content)
+    elif user.usertype==2:
+        print(166166166)
+        return render(request, 'pages/spotdetail_c.html',content)
 ##########################################管理员相关接口################################################################d
 def mgplace(request):
     cook = request.COOKIES.get('usermail')
@@ -199,6 +221,11 @@ def delplace(request,place_id):#删除地点
     if cook == None:
         return  render(request, 'pages/index.html')
     temp_id=place_id
+    place=Places.objects.get(id=temp_id)
+    sotlist=place.scenicspot_set.all()
+    for spot in spotlist:
+        spot.nearbyplace.remove(place) 
+    Users.objects.filter(user=place.user).delete()
     Places.objects.filter(id=temp_id).delete()
     return HttpResponseRedirect(reverse('pages:mgplace'))
 
@@ -231,6 +258,7 @@ def addspot(request):#添加景点页面
     print('cook:', cook)
     if cook == None:
         return  render(request, 'pages/index.html')
+    user = Users.objects.get(email = cook)
     place_list=Places.objects.all().order_by('publishtime')
     content={'place_list':place_list}
     if request.method == 'POST':
@@ -253,10 +281,20 @@ def addspot(request):#添加景点页面
             for placename in placename_list:
                 place=Places.objects.get(name=placename)
                 scenicspot.nearbyplace.add(place)
+        if user.usertype==1:
             return HttpResponseRedirect(reverse('pages:mgspot'))
-        return render(request, 'pages/admin_addplace.html')
-    print('addspot1:' ,addspot)
-    return render(request,'pages/admin_addspot.html',content)
+        elif user.usertype==2:
+            print('260260260260')
+            place=Places.objects.get(user=user)
+            print(place.name)
+            spot_list=Scenicspot.objects.all().order_by('-id')
+            scenicspot.nearbyplace.add(place)
+            content={'place':place,'spot_list':spot_list}
+            return render(request,'pages/editinfo_c.html',content)
+    if user.usertype==1:
+        return render(request,'pages/admin_addspot.html',content)
+    elif user.usertype==2:
+        return render(request,'pages/place_addspot.html',content)
 
 def editspot(request,spot_id):
     cook = request.COOKIES.get('usermail')
@@ -315,6 +353,9 @@ def deluser(request,user_id):
     if cook == None:
         return  render(request, 'pages/index.html')
     temp_id=user_id
+    user = Users.objects.get(id=temp_id)
+    if user.usertype==2:
+        Places.objects.filter(user=user).delete()
     Users.objects.filter(id=temp_id).delete()
     return HttpResponseRedirect(reverse('pages:mguser'))
 
