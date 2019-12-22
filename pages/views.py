@@ -276,11 +276,14 @@ def editspot(request,spot_id):
         else:
             temp_image=''
         spot.name=temp_name
-        spot.place=temp_place
         spot.introduce=temp_introduce
         spot.address=temp_address
         spot.opentime=temp_opentime
         spot.image=temp_image
+        placename_list = request.POST.getlist('placename') 
+        for placename in placename_list:
+            place=Places.objects.get(name=placename)
+            spot.nearbyplace.add(place)
         spot.save()
         return HttpResponseRedirect(reverse('pages:mgspot'))
     placelist=Places.objects.all()

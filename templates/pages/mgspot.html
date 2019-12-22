@@ -32,7 +32,7 @@
                 <a href="{% url 'pages:addspot' %}"><input type="submit" value="添加景点" style="width:120px; height:30px;float:right" ></a>
             {% for spot in spot_list.all %}
                 <h4>{{ spot.name }}</h4>
-                <img src='{{ MEDIA_URL }}{{ spot.image}}' alt=''/>
+                <img name="image" src='{{ MEDIA_URL }}{{ spot.image}}' alt=''/ width="800" height="600">
                 <p align="left" ><lable>简介:</label> {{ spot.introduce}}</p>
                 <p align="left" id=pcontent><lable>附近养老机构:</label>
                     {% for place in spot.nearbyplace.all %}
