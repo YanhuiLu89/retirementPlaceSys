@@ -48,7 +48,7 @@
 {% block contentbody %}
     <div id=textcontent>
         <h4>{{ place.name }}</h4>
-        <img src='{{ MEDIA_URL }}{{ place.image}}' alt=''/>
+        <img src='{{ MEDIA_URL }}{{ place.image}}' width="800" height="600" alt=''/>
         <p align="left" id=pcontent><lable>关键词:</label> {{ place.keywords}}</p>
         <p align="left" id=pcontent><lable>简介:</label> {{ place.introduce}}</p>
         <p align="left" id=pcontent>电话：{{place.phone}} </p>
@@ -68,6 +68,16 @@
                 <td>{{place.spotticket}}</td>
                 <td>&nbsp&nbsp医疗:</td>
                 <td>{{place.hospital}}</td>
+            </tr>
+        </p>
+        <p align="left" id=pcontent>
+            <tr>
+                <td >附近景点：</td>
+                <td>
+                    {% for spot in place.scenicspot_set.all %}
+                    &nbsp&nbsp<a  href="{% url 'pages:placedetail' place.id %}">{{ spot.name}}</a>
+                    {% endfor %}
+                </td>
             </tr>
         </p>
         <p align="left" id=pcontent>

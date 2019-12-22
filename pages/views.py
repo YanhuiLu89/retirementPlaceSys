@@ -596,9 +596,14 @@ def editinfo_c(request,place_id):#编辑信息
         if 'image' in request.FILES:
             place.image=request.FILES['image']
         place.publishtime=timezone.now()
+        nearbyspot_list = request.POST.getlist('spotname') 
+        for spotname in nearbyspot_list:
+            spot=Scenicspot.objects.get(name=spotname)
+            spot.nearbyplace.add(place)
         place.save()
         return HttpResponseRedirect(reverse('pages:mginfo_c'))#重定向到首页，显示新修改的内容
-    content={'place':place}
+    spot_list=Scenicspot.objects.all().order_by('-id')
+    content={'place':place,'spot_list':spot_list}
     return render(request,'pages/editinfo_c.html',content)
 
 def mgorder_c(request):#管理订单

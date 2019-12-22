@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <td tyle="width:30%" align="right">图片：</td>
-                        <td style="width:70%" align="left"><img src='{{ MEDIA_URL }}{{ place.image}}' alt='' width="800" height="800"/></td>
+                        <td style="width:70%" align="left"><img src='{{ MEDIA_URL }}{{ place.image}}' alt='' width="800" height="600"/></td>
                     </tr>
                     <tr>
                         <td style="width:30%" align="right">更改图片：</td>
@@ -93,6 +93,24 @@
                             <label><input name="spotticket" type="radio"" value="较贵" />较贵 </label> 
                             <label><input name="spotticket" type="radio"" value="便宜" />便宜 </label> 
                             <label><input name="spotticket" type="radio"" value="较便宜" />较便宜 </label> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ></td>
+                        <td>
+                            {% for spot in place.scenicspot_set.all %}
+                            <label name="nearbyspot" style="display:none">{{spot.name}}</label>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:30%">附近景点<label font-size="10px">(按住ctrl键,再点击可多选哟)</label></td>
+                        <td style="width: 70%;height:60px">
+                            <select name="spotname"  class="selectpicker form-control" multiple data-max-options="10" style="width: 50%;float:left">
+                                {% for spot in spot_list.all %}
+                                <option name='{{spot.name}}'>{{spot.name}}</option>
+                            {% endfor %}
+                            </select> 
                         </td>
                     </tr>
                     <tr>
@@ -153,6 +171,7 @@
             priceFunction();
             spotticketFunction();
             hospitalFunction();
+            nearbySpotFunction();
         }
         function trafficFunction() {
             var traffic = document.getElementById('trafficlist');
@@ -236,6 +255,15 @@
             }
             else if(text.indexOf("无三甲医院")!=-1){
                 hospitallabels[1].checked=true;
+            }
+        }
+        function nearbySpotFunction() {
+            var nearbySpotLabels = document.getElementsByName('nearbyspot');
+           for( var i=0; i<nearbySpotLabels.length; i++){
+                var label = nearbySpotLabels[i];
+                var spotname=label.innerText;
+                var option=document.getElementsByName(spotname)[0];
+                option.selected = true;  
             }
         }
     </script>
