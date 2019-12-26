@@ -222,10 +222,10 @@ def delplace(request,place_id):#删除地点
         return  render(request, 'pages/index.html')
     temp_id=place_id
     place=Places.objects.get(id=temp_id)
-    sotlist=place.scenicspot_set.all()
+    spotlist=place.scenicspot_set.all()
     for spot in spotlist:
         spot.nearbyplace.remove(place) 
-    Users.objects.filter(user=place.user).delete()
+    place.user.delete()
     Places.objects.filter(id=temp_id).delete()
     return HttpResponseRedirect(reverse('pages:mgplace'))
 

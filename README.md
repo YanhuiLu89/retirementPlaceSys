@@ -18,4 +18,6 @@ create database retirement_place_db DEFAULT CHARACTER SET utf8 COLLATE utf8_gene
 在浏览器地址栏输入http://127.0.0.1:8000/pages/index/进入首页，首页有登录和注册入口
 
 目前实现功能：注册、登录、重复注册，密码或用户名不对，管理员主界面，管理员添加地点
+
+还剩编辑景点、添加景点时的默认值，编辑place信息时的默认值，商家添加景点，总体调试
    
