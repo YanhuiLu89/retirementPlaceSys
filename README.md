@@ -23,7 +23,6 @@ create database retirement_place_db DEFAULT CHARACTER SET utf8 COLLATE utf8_gene
 6、创建管理员账户，管理员是不能注册的。从命令行进入graduationDesignSys路径，依次执行以下命令
 	python manage.py shell
 	>>> from pages.models import Users
-	>>> from pages.models import AdminInfos;
 	>>> admin=Users(usertype=1,name='admin01',password='123456',email="296932576@qq.com")
 	>>> admin.save()
 	ctrl-z退出 shell命令
